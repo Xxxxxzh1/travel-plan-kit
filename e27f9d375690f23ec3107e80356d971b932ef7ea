@@ -1,0 +1,46 @@
+scripts/record_demo.mjs
+  9115b45319058df0 1-131
+README.md
+  9115b45319058df0 8,11-42,49,52-54,69,71-72,75-76,91-94,96,105,171,178-183
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "e27f9d375690f23ec3107e80356d971b932ef7ea",
+  "prompts": {
+    "9115b45319058df0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3f7e32e-a535-4c72-93ac-b1053400f6c4",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zhengzhi",
+      "messages": [],
+      "total_additions": 2578,
+      "total_deletions": 3085,
+      "accepted_lines": 2578,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "scripts/record_demo.mjs": {
+          "additions": 131,
+          "accepted_lines": 131
+        },
+        "README.md": {
+          "additions": 59,
+          "deletions": 23,
+          "accepted_lines": 59
+        },
+        "docs/screenshots/roadbook-days.png": {
+          "deletions": 1261
+        },
+        "docs/screenshots/roadbook-demo.gif": {
+          "additions": 2388,
+          "accepted_lines": 2388
+        },
+        "docs/screenshots/roadbook-drawer.png": {
+          "deletions": 1801
+        }
+      }
+    }
+  }
+}
