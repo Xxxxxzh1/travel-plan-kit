@@ -4,26 +4,54 @@ Turn **one `trip.yaml`** into a complete set of travel documents — a Markdown
 table, a print-ready PDF, and a mobile **roadbook**: a single self-contained
 HTML file with every ticket embedded, that opens on your phone with no signal.
 
-Built for a two-week Italy/Switzerland trip where the roadbook got used daily on
-trains, in alpine valleys, and at museum turnstiles.
-
 <p align="center">
-  <img src="docs/screenshots/roadbook-days.png" width="290" alt="roadbook day list">
-  <img src="docs/screenshots/roadbook-drawer.png" width="290" alt="roadbook ticket drawer">
-</p>
-<p align="center">
-  <img src="docs/screenshots/itinerary-pdf.png" width="640" alt="printed itinerary PDF">
+  <img src="docs/screenshots/roadbook-demo.gif" width="310" alt="roadbook interaction: day list → ticket drawer → tabs → full-screen ticket">
 </p>
 
-## What you get
+## The roadbook
+
+This is the part worth the effort. It is one HTML file — no server, no app, no
+network. AirDrop it to a phone and it works on a plane, on a train, in an alpine
+valley.
+
+**Built to be used one-handed, standing up, in a hurry:**
+
+- **Tap any day** → a bottom-sheet drawer slides up with everything for that
+  day: the schedule, the transport legs with train numbers and seat
+  assignments, where you're sleeping, and the tickets themselves. Swipe down
+  to dismiss it.
+- **Tickets are grouped and counted** — `全部 3 · 🚄 交通 2 · 🏨 住宿 1`. At a
+  ticket gate you want the train ticket, not a scroll through your camera roll.
+- **Tap a ticket** → full-screen. Pinch to zoom into a QR code, swipe between
+  tickets, long-press to save to your photo library.
+- **🎫 全部票据** → every ticket in the whole trip in one place, grouped by
+  category and de-duplicated (a rail pass used on three days appears once).
+- **Addresses are Google Maps links.** Every stay shows one, and the drawer has
+  a full-width "🧭 在 Google 地图中打开" button — the thing you actually want
+  when you're standing on a street corner at 22:00.
+- **Filter by country** to collapse a 14-day trip down to one leg.
+- **Live countdown** — `D-12` before you leave, `Day 3` while you're away, and
+  the current day's card is highlighted with a "今天" badge.
+- **Follows your phone's light/dark setting**, and every colour is
+  contrast-checked against both.
+
+The whole thing — itinerary, lodging, and every ticket image — is embedded in
+the file. Nothing is fetched at runtime, which is exactly why it still works
+when nothing else does.
+
+## What else you get
 
 | Output | What it's for |
 |---|---|
 | `itinerary.md` | the master table, plain Markdown — readable anywhere, diffable |
 | `itinerary.html` | the same table, styled for print |
 | `itinerary.pdf` | landscape A4 — print one per traveller; border officers sometimes question people separately |
-| `roadbook.html` | **the one that matters in the field.** Mobile layout, ticket drawer, lightbox, Google Maps links, works offline |
+| `roadbook.html` | the offline roadbook above |
 | `roadbook.enc.html` | optional password-encrypted roadbook, safe to host publicly |
+
+<p align="center">
+  <img src="docs/screenshots/itinerary-pdf.png" width="620" alt="printed itinerary PDF">
+</p>
 
 ## Quick start
 
@@ -38,21 +66,14 @@ open examples/italy-switzerland/out/roadbook.html
 
 Then copy `trip.example.yaml`, fill in your own trip, and run `build.py` on it.
 
-## The idea
+## How the formats stay consistent
 
-Every format renders from the same data, so they cannot disagree.
-
-That sounds obvious, but the version this tool replaced got it wrong. The
-Markdown itinerary and the HTML itinerary were separate hand-edited copies of
-the same table. They drifted — and months after the museum tickets had been
-bought, one of the two still said the museum was unbooked. If you have ever
-maintained a trip in four formats at once, you have met this bug.
-
-Two rules keep it from coming back:
+Every output renders from the same data, so they cannot disagree with each
+other. Two rules enforce that:
 
 **A stay is declared once.** `lodging` is a top-level list; a day references it
-by `id`. A three-night stay used to exist in three places, so correcting an
-address meant editing three copies.
+by `id`. A stay that spans three nights is stored once and looked up three
+times, so correcting an address is one edit rather than three.
 
 ```yaml
 lodging:
@@ -67,7 +88,12 @@ days:
   - {n: 1, date: 2027-09-24, city: 罗马, lodging: rome}
 ```
 
-**The build validates before it generates.** `nights` is checked against the
+**The Markdown and the HTML render from one row builder.** They pass a format
+flag that changes only how inline markup becomes text — never the structure. Two
+hand-maintained copies of the same table drift apart eventually; one builder
+cannot drift from itself.
+
+**And the build validates before it generates.** `nights` is checked against the
 dates. A day pointing at a lodging id that doesn't exist is an error. So is a
 ticket id with no file behind it, and a date out of order. You get every problem
 at once, with its location:
@@ -76,6 +102,7 @@ at once, with its location:
 trip file has problems:
   - days[3]: lodging 'nowhere' is not defined in the lodging list
   - lodging[0]: nights=4 but 2027-09-24..2027-09-27 is 3 night(s)
+  - tickets[6]: file not found: tickets/shinkansen.pdf
 ```
 
 ## Requirements
@@ -141,10 +168,19 @@ scripts/
   make_sample_tickets.py      generate synthetic tickets for the example
   encrypt_roadbook.mjs        AES-256-GCM password gate
   browser.py                  locate and drive headless Chrome
+  record_demo.mjs             capture the README's demo GIF
 templates/                    tokens.css, itinerary.html, roadbook.html
 references/                   data model, pipeline, ticket handling
 examples/italy-switzerland/   complete worked example
 docs/screenshots/             images used above
+```
+
+The demo GIF is regenerated by recording the built example:
+
+```bash
+cd examples/italy-switzerland/out && python3 -m http.server 8770 --bind 127.0.0.1 &
+node scripts/record_demo.mjs http://localhost:8770/roadbook.html /tmp/frames
+# then assemble the PNGs in /tmp/frames into a GIF with Pillow
 ```
 
 ## About the example data
