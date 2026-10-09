@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>意大利 · 瑞士 旅行计划</title>
+<style>
+  /* ---------------------------------------------------------------------------
+   Design tokens shared by every generated document.
+
+   Two accents carry meaning throughout: green = Italy, blue = Switzerland.
+   Generated documents colour-code every itinerary row by country, so a reader
+   can see at a glance which half of the trip they are looking at.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* country accents */
+  --it:        #2d6a4f;
+  --it-soft:   #e7f4ec;
+  --it-line:   #a7d7bb;
+
+  --ch:        #1565c0;
+  --ch-soft:   #e6f1fb;
+  --ch-line:   #9dc7ee;
+
+  /* semantic */
+  --ok:        #2e7d32;
+  --ok-soft:   #e8f5e9;
+  --warn:      #b45309;
+  --warn-soft: #fdf3e3;
+  --stop:      #c62828;
+  --stop-soft: #fdeceb;
+
+  /* neutrals (light) */
+  --ink:       #111827;
+  --ink-2:     #4b5563;
+  --ink-3:     #8b95a3;
+  --bg:        #f2f4f7;
+  --card:      #ffffff;
+  --hair:      #e8ebef;
+
+  /* geometry */
+  --r:         16px;
+  --r-sm:      11px;
+  --shadow:    0 1px 2px rgba(16,24,40,.05), 0 6px 20px -8px rgba(16,24,40,.14);
+  --shadow-lg: 0 10px 40px -10px rgba(16,24,40,.28);
+
+  /* mobile safe areas */
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --it:        #4ade80;
+    --it-soft:   #14301f;
+    --it-line:   #2f6b45;
+
+    --ch:        #60a5fa;
+    --ch-soft:   #12243d;
+    --ch-line:   #2b5a8c;
+
+    --ok:        #4ade80;
+    --ok-soft:   #14301f;
+    --warn:      #fbbf24;
+    --warn-soft: #33280f;
+    --stop:      #f87171;
+    --stop-soft: #3a1a1a;
+
+    --ink:       #eef2f6;
+    --ink-2:     #aab4c0;
+    --ink-3:     #7c8794;
+    --bg:        #0d1016;
+    --card:      #171b22;
+    --hair:      #252b34;
+
+    --shadow:    0 1px 2px rgba(0,0,0,.4), 0 6px 20px -8px rgba(0,0,0,.6);
+    --shadow-lg: 0 10px 40px -10px rgba(0,0,0,.75);
+  }
+}
+
+  @page { size: A4 landscape; margin: 5mm; }
+  @media print { .section { padding: 0 4px !important; margin: 12px auto !important; } }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+                 "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink); font-size: 9.4pt; line-height: 1.5;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  .hero { background: linear-gradient(135deg, #1b5e20 0%, #1565c0 100%);
+          color: #fff; padding: 14px 20px 11px; }
+  .hero h1 { font-size: 16pt; font-weight: 800; letter-spacing: .3px; margin-bottom: 5px; }
+  .hero .sub { font-size: 9.6pt; opacity: .93; }
+
+  .section { max-width: 1400px; margin: 10px auto; padding: 0 12px; }
+
+  .table-wrap { border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
+  table.itin { width: 100%; border-collapse: collapse; background: var(--card);
+               font-size: 7.9pt; table-layout: fixed; }
+  table.itin th { background: #37474f; color: #fff; padding: 6px 5px; text-align: left;
+                  font-weight: 600; font-size: 7.8pt; }
+  table.itin td { padding: 4px 5px; border-bottom: 1px solid #eceff1;
+                  vertical-align: top; word-wrap: break-word; overflow-wrap: break-word;
+                  line-height: 1.34; }
+  table.itin tr { break-inside: avoid; page-break-inside: avoid; }
+  table.itin tbody tr:nth-child(even) td { background: #fafbfc; }
+
+  th.c-date, td.c-date { width: 52px; }
+  th.c-city, td.c-city { width: 64px; }
+  th.c-slot, td.c-slot { width: 32px; color: var(--ink-3); font-weight: 600; }
+  th.c-plan, td.c-plan { width: 250px; }
+  th.c-trans, td.c-trans { width: 252px; }
+  th.c-stay, td.c-stay { width: 128px; }
+  th.c-weather, td.c-weather { width: 74px; }
+  th.c-file, td.c-file { width: 134px; font-size: 7pt; color: #607d8b; word-break: break-all; }
+
+  td.c-date { border-left: 3px solid var(--it); white-space: nowrap; }
+  tr.row-ch td.c-date { border-left-color: var(--ch); }
+  td.c-date .dn { display: block; color: var(--ink-3); font-size: 7.2pt; margin-top: 2px; }
+
+  .hl    { color: var(--it); font-weight: 700; }
+  tr.row-ch .hl { color: var(--ch); }
+  .warn  { color: var(--warn); font-weight: 700; }
+  td.c-stay b { font-weight: 700; }
+
+  .notes { background: var(--card); border-radius: 10px; padding: 14px 18px;
+           box-shadow: var(--shadow); }
+  .notes h3 { font-size: 10pt; margin-bottom: 7px; break-after: avoid; }
+  .cols { column-count: 2; column-gap: 26px; }
+  .cols .note { break-inside: avoid; }
+  .notes h3 + .note { margin-top: 0; }
+  .note { display: flex; gap: 9px; padding: 6px 0; font-size: 8.6pt;
+          border-top: 1px solid var(--hair); }
+  .note .b { flex: 0 0 4px; border-radius: 2px; background: var(--warn); margin: 3px 0; }
+  .note.red .b { background: var(--stop); }
+  .note.todo .b { background: var(--ch); }
+  .note.todo::after { content: ""; }
+  .foot { text-align: center; color: var(--ink-3); font-size: 7.4pt;
+          padding: 5px 20px 4px; break-before: avoid; page-break-before: avoid; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>意大利 · 瑞士 旅行计划 · Italy &amp; Switzerland</h1>
+  <div class="sub">2027.09.24 — 10.07 &nbsp;·&nbsp; 14 天 13 晚 &nbsp;·&nbsp; Janz · Lynn</div>
+  <div class="sub" style="margin-top:3px">✈️ 去程 <b>2027-09-24</b> EK95 Rome Fiumicino (FCO), Italy 20:05 ｜ 回程 <b>2027-10-07</b> EK88 Zurich (ZRH), Switzerland 15:30</div>
+  <div class="sub" style="margin-top:3px">✅ All flights, train tickets and accommodation are fully paid and confirmed.</div>
+</div>
+
+<div class="section">
+  <div class="table-wrap">
+    <table class="itin">
+      <thead><tr><th>日期</th><th>城市</th><th>时间段</th><th>行程内容</th><th>交通（车票 / 起终站 / 发车时刻）</th><th>当天住宿（名称 + 地址）</th><th>天气和穿衣</th><th>票附件</th></tr></thead>
+      <tbody>
+<tr class="row-it">
+<td class="c-date"><b>9/24</b> 周五<span class="dn">Day 1</span></td>
+<td class="c-city">罗马</td>
+<td class="c-slot">夜</td>
+<td class="c-plan">🛬 20:05 抵达罗马 FCO → Leonardo Express 入市区 → 入住</td>
+<td class="c-trans">✈️ <b>阿联酋航空 EK311</b>：杭州萧山 T4 <span class="hl">00:10</span> → 迪拜 T3 <span class="hl">04:30</span>｜经迪拜中转<br>✈️ <b>阿联酋航空 EK95</b>：迪拜 T3 <span class="hl">15:45</span> → 罗马 FCO T3 <span class="hl">20:05</span>｜转机 11h15m<br>🚄 <b>Leonardo Express</b>：罗马 FCO → 罗马 Termini｜约 32 分钟 · €14 · 机场现场购票</td>
+<td class="c-stay"><b>罗马民宿 · 房东 Marco</b><br>📍Via dei Fiori, 12, Rome, Italy<br>入住 16:00 · 退房 10:00</td>
+<td class="c-weather">18–26°C<br>轻薄长袖 + 薄外套</td>
+<td class="c-file">tickets/flight.png<br>tickets/stay-rome.png</td>
+</tr>
+<tr class="row-it">
+<td class="c-date"><b>9/25</b> 周六<span class="dn">Day 2</span></td>
+<td class="c-city">罗马</td>
+<td class="c-slot">上午<br>午后<br>下午<br>晚</td>
+<td class="c-plan">🎨 <span class="hl">博尔盖塞美术馆</span> 10:00 入场 – 12:00 出场（严格限时段）<br>⛪ 圣彼得大教堂（免费）+ 圣彼得广场，午餐<br>🖼 <span class="hl">梵蒂冈博物馆 + 西斯廷礼拜堂</span> 16:30 入场<br>🍝 Trastevere 老区漫步晚餐</td>
+<td class="c-trans">🚶 <b>步行 + 地铁 A 线</b>：市区内移动｜单程票 €1.5</td>
+<td class="c-stay"><b>罗马民宿 · 房东 Marco</b><br>📍Via dei Fiori, 12, Rome, Italy<br>入住 16:00 · 退房 10:00</td>
+<td class="c-weather">18–26°C<br>轻薄长袖 + 薄外套</td>
+<td class="c-file">tickets/museum-borghese.png<br>tickets/museum-vatican.png</td>
+</tr>
+<tr class="row-it">
+<td class="c-date"><b>9/26</b> 周日<span class="dn">Day 3</span></td>
+<td class="c-city">罗马</td>
+<td class="c-slot">上午<br>下午<br>晚</td>
+<td class="c-plan">🏛 <span class="hl">斗兽场</span> 08:30 入场 + 古罗马广场 + 帕拉蒂尼山（标准 24H 套票，<span class="warn">不含竞技场地面/地下</span>）<br>🏺 万神庙（€5，现场）→ 纳沃纳广场 → 许愿池<br>🍽 西班牙阶梯附近晚餐</td>
+<td class="c-trans">🚶 <b>步行 + 地铁 B 线</b>：斗兽场 → 万神庙 → 许愿池｜全程步行约 25 分钟</td>
+<td class="c-stay"><b>罗马民宿 · 房东 Marco</b><br>📍Via dei Fiori, 12, Rome, Italy<br>入住 16:00 · 退房 10:00</td>
+<td class="c-weather">18–26°C<br>轻薄长袖 + 薄外套</td>
+<td class="c-file">tickets/museum-colosseum.png</td>
+</tr>
+<tr class="row-it">
+<td class="c-date"><b>9/27</b> 周一<span class="dn">Day 4</span></td>
+<td class="c-city">罗马 → 那不勒斯</td>
+<td class="c-slot">上午<br>下午<br>晚</td>
+<td class="c-plan">🧳 罗马自由活动；<span class="warn">10:00 退房</span><br>🏛 抵那不勒斯入住；国家考古博物馆（庞贝文物精华，现场购票）<br>🍕 Spaccanapoli 历史街区漫步 + 正宗那不勒斯披萨</td>
+<td class="c-trans">🚄 <b>Italo 9975（SMART）</b>：罗马 Termini <span class="hl">12:41</span> → 那不勒斯 Centrale <span class="hl">13:58</span>｜6 车厢 座 5/6 · 含选座</td>
+<td class="c-stay"><b>那不勒斯民宿 · 房东 Giulia</b><br>📍Via del Mare, 7, Naples, Italy<br>入住 15:00 · 退房 10:00</td>
+<td class="c-weather">19–27°C<br>短袖 + 防晒</td>
+<td class="c-file">tickets/train-italo.png<br>tickets/stay-naples.png</td>
+</tr>
+<tr class="row-it">
+<td class="c-date"><b>9/28</b> 周二<span class="dn">Day 5</span></td>
+<td class="c-city">卡普里（那不勒斯往返）</td>
+<td class="c-slot">早<br>上午<br>下午<br>傍晚</td>
+<td class="c-plan">⛴ 8:00 Molo Beverello 乘高速船出发<br>💙 蓝洞（视海况，早到排队）· 缆车上卡普里镇<br>🌊 奥古斯丁花园（免费观景）+ 免费海滩 Marina Piccola<br>🌅 乘轮渡返回那不勒斯住宿</td>
+<td class="c-trans">⛴️ <b>那不勒斯 ↔ 卡普里 Hydrofoil</b>：Molo Beverello 港 ↔ 卡普里 Marina Grande｜约 50 分钟/程 · €22–25/程 · 港口现场购票</td>
+<td class="c-stay"><b>那不勒斯民宿 · 房东 Giulia</b><br>📍Via del Mare, 7, Naples, Italy<br>入住 15:00 · 退房 10:00</td>
+<td class="c-weather">19–27°C<br>短袖 + 防晒 + 泳衣</td>
+<td class="c-file">—（当日无预订票）</td>
+</tr>
+<tr class="row-it">
+<td class="c-date"><b>9/29</b> 周三<span class="dn">Day 6</span></td>
+<td class="c-city">那不勒斯 → 佛罗伦萨</td>
+<td class="c-slot">上午<br>下午<br>晚</td>
+<td class="c-plan">🧳 那不勒斯 <span class="warn">10:00 退房</span>；乘高铁出发<br>🌉 14:11 抵佛罗伦萨，入住休整；韦奇奥桥漫步<br>🍷 阿诺河畔晚餐</td>
+<td class="c-trans">🚄 <b>Frecciarossa 9420</b>：那不勒斯 Centrale <span class="hl">11:10</span> → 佛罗伦萨 SMN <span class="hl">14:11</span>｜2 等 · 8 车厢 · 含选座</td>
+<td class="c-stay"><b>佛罗伦萨民宿 · 房东 Chiara</b><br>📍Via dell'Arno, 21, Florence, Italy<br>入住 12:00 · 退房 10:00</td>
+<td class="c-weather">15–24°C<br>薄外套必备</td>
+<td class="c-file">tickets/train-freccia.png<br>tickets/stay-florence.png</td>
+</tr>
+<tr class="row-it">
+<td class="c-date"><b>9/30</b> 周四<span class="dn">Day 7</span></td>
+<td class="c-city">佛罗伦萨</td>
+<td class="c-slot">上午<br>下午<br>下午<br>傍晚</td>
+<td class="c-plan">🗿 <span class="hl">学院美术馆</span> 08:45 入场（米开朗基罗《大卫》）→ 圣母百花大教堂<br>🗼 <span class="hl">旧宫塔楼 Torre di Arnolfo</span> 13:45 入场（俯瞰全城）<br>🖼 <span class="hl">乌菲兹美术馆</span> 15:30 入场（含语音导览 · 建议预留 2–3 小时）<br>🌇 米开朗基罗广场看日落（免费 · 最佳全景）</td>
+<td class="c-trans">🚶 <b>步行 + 公交 12/13</b>：学院美术馆 → 大教堂 → 旧宫 → 乌菲兹｜旧宫至乌菲兹步行约 5 分钟</td>
+<td class="c-stay"><b>佛罗伦萨民宿 · 房东 Chiara</b><br>📍Via dell'Arno, 21, Florence, Italy<br>入住 12:00 · 退房 10:00</td>
+<td class="c-weather">15–24°C<br>薄外套必备</td>
+<td class="c-file">tickets/museum-accademia.png<br>tickets/museum-vecchio.png<br>tickets/museum-uffizi.png</td>
+</tr>
+<tr class="row-it">
+<td class="c-date"><b>10/1</b> 周五<span class="dn">Day 8</span></td>
+<td class="c-city">佛罗伦萨 → 比萨 → 米兰</td>
+<td class="c-slot">上午<br>下午<br>晚</td>
+<td class="c-plan">🧳 <span class="warn">早退房</span>（列车 09:38 发）；10:59 抵比萨<br>🗼 比萨奇迹广场（外观拍照，不登塔）+ 大教堂 + 洗礼堂；13:39 乘车赴米兰<br>🍸 17:55 抵米兰入住；大教堂夜景；Navigli 运河 Aperitivo</td>
+<td class="c-trans">🚄 <b>Regionale 18285</b>：佛罗伦萨 SMN <span class="hl">09:38</span> → 比萨 Centrale <span class="hl">10:59</span>｜2 等 · 不对号<br>🚄 <b>Intercity 674</b>：比萨 Centrale <span class="hl">13:39</span> → 米兰 Centrale <span class="hl">17:55</span>｜2 等 · 6 车厢 座 11C/11D</td>
+<td class="c-stay"><b>米兰民宿 · 房东 Luca</b><br>📍Via Brera Nuova, 4, Milan, Italy<br>入住 15:00 · 退房 10:00</td>
+<td class="c-weather">13–22°C<br>中层外套</td>
+<td class="c-file">tickets/train-regionale.png<br>tickets/train-intercity.png<br>tickets/stay-milan.png</td>
+</tr>
+<tr class="row-it">
+<td class="c-date"><b>10/2</b> 周六<span class="dn">Day 9</span></td>
+<td class="c-city">米兰</td>
+<td class="c-slot">上午<br>下午<br>晚</td>
+<td class="c-plan">🌳 和平之门公园（Parco Sempione）+ 布雷拉艺术区<br>⛪ 米兰大教堂（可登顶，现场购票）+ 埃马努埃莱二世拱廊<br>🛶 Navigli 运河区散步晚餐</td>
+<td class="c-trans">🚶 <b>步行 + 地铁 M1/M2</b>：米兰市区｜单程票 €2.2</td>
+<td class="c-stay"><b>米兰民宿 · 房东 Luca</b><br>📍Via Brera Nuova, 4, Milan, Italy<br>入住 15:00 · 退房 10:00</td>
+<td class="c-weather">13–22°C<br>中层外套</td>
+<td class="c-file">—（当日无预订票）</td>
+</tr>
+<tr class="row-ch">
+<td class="c-date"><b>10/3</b> 周日<span class="dn">Day 10</span></td>
+<td class="c-city">米兰 → 施皮茨</td>
+<td class="c-slot">上午<br>下午<br>晚</td>
+<td class="c-plan">🧳 米兰 <span class="warn">早退房</span>（列车 09:25 发）；11:05 抵 Domodossola<br>🏰 换乘 11:58；13:44 抵施皮茨（5 站台）；施皮茨城堡 + 图恩湖畔漫步<br>🍽 湖畔小镇晚餐，入住</td>
+<td class="c-trans">🚄 <b>REG 2408</b>：米兰 Centrale <span class="hl">09:25</span> → Domodossola <span class="hl">11:05</span>｜意铁区间车 · 2 等<br>🚄 <b>换乘 RE 4270</b>：Domodossola <span class="hl">11:58</span> → 施皮茨 Spiez <span class="hl">13:44</span>｜5 站台换乘</td>
+<td class="c-stay"><b>施皮茨酒店</b><br>📍Seestrasse 18, 3700 Spiez, Switzerland<br>入住 15:30 – 22:00 · 退房 05:00 – 10:30<br><b>不可退款</b></td>
+<td class="c-weather">8–16°C<br>厚外套 + 防水外层 + 登山鞋</td>
+<td class="c-file">tickets/train-milano-spiez-p1.png<br>tickets/train-milano-spiez-p2.png<br>tickets/stay-spiez.png</td>
+</tr>
+<tr class="row-ch">
+<td class="c-date"><b>10/4</b> 周一<span class="dn">Day 11</span></td>
+<td class="c-city">施皮茨 → 因特拉肯 → 布里恩茨</td>
+<td class="c-slot">上午<br>全天<br>下午</td>
+<td class="c-plan">🧳 施皮茨 <span class="warn">10:30 前退房</span>；施皮茨 → 因特拉肯东；<span class="hl">Jungfrau Travel Pass 今日启用</span><br>🚠 少女峰区：<span class="hl">First 缆车 + First Cliff Walk 悬崖步道</span>（可选 First Flyer 滑翔伞）<br>🏡 前往布里恩茨入住；湖畔晚餐</td>
+<td class="c-trans">🚄 <b>施皮茨 → 因特拉肯东</b>：Libero 个人票（720/730/740/750 区）｜有效 09:05–10:35<br>🚠 <b>Jungfrau Travel Pass 3 天</b>：10/4 – 10/6 连续 3 天 · 2 等｜覆盖少女峰区火车 / 缆车</td>
+<td class="c-stay"><b>布里恩茨民宿 · 房东 Andreas</b><br>📍Dorfstrasse 9, Brienz, Switzerland<br>入住 15:00 · 退房 11:00</td>
+<td class="c-weather">8–16°C<br>厚外套 + 防水外层 + 登山鞋</td>
+<td class="c-file">tickets/train-spiez-interlaken.png<br>tickets/pass-jungfrau.png<br>tickets/stay-brienz.png</td>
+</tr>
+<tr class="row-ch">
+<td class="c-date"><b>10/5</b> 周二<span class="dn">Day 12</span></td>
+<td class="c-city">少女峰（布里恩茨往返）</td>
+<td class="c-slot">上午<br>下午<br>⚠️</td>
+<td class="c-plan">🏔 布里恩茨 → 因特拉肯 → Grindelwald / Lauterbrunnen → <span class="hl">少女峰站 3454m</span>；斯芬克斯观景台；冰宫<br>🥾 下山至 Kleine Scheidegg → Männlichen 缆车 → 经典全景徒步 → 返布里恩茨<br>🎫 <span class="warn">登顶段 Jungfraujoch 未预订</span>：Pass 仅覆盖至 Eigergletscher，登顶需现场补票约 CHF 75</td>
+<td class="c-trans">🚠 <b>Jungfrau Travel Pass</b>：覆盖区内火车 / 缆车至 Eigergletscher｜First、Männlichen、Schynige Platte 均含<br>🎫 <b>少女峰登顶段</b>：Eigergletscher → Jungfraujoch｜未预订 · 现场补票约 CHF 75</td>
+<td class="c-stay"><b>布里恩茨民宿 · 房东 Andreas</b><br>📍Dorfstrasse 9, Brienz, Switzerland<br>入住 15:00 · 退房 11:00</td>
+<td class="c-weather">-5°C<br>羽绒服 + 抓绒 + 手套 + 帽子</td>
+<td class="c-file">tickets/pass-jungfrau.png</td>
+</tr>
+<tr class="row-ch">
+<td class="c-date"><b>10/6</b> 周三<span class="dn">Day 13</span></td>
+<td class="c-city">布里恩茨（机动日）</td>
+<td class="c-slot">全天<br>或<br>晚</td>
+<td class="c-plan">🚂 <span class="hl">布里恩茨罗特洪蒸汽登山小火车</span>（1892 年至今，住宿门口出发！需确认 10 月运营）<br>🌺 Schynige Platte 高山植物园（Pass 覆盖）/ 布里恩茨湖游船 / 湖畔木雕小镇漫步<br>🍽 布里恩茨告别晚餐</td>
+<td class="c-trans">🚊 <b>Jungfrau Travel Pass</b>：布里恩茨 ↔ 因特拉肯 ↔ 少女峰区｜区内往返不限次</td>
+<td class="c-stay"><b>布里恩茨民宿 · 房东 Andreas</b><br>📍Dorfstrasse 9, Brienz, Switzerland<br>入住 15:00 · 退房 11:00</td>
+<td class="c-weather">8–16°C<br>厚外套 + 防水外层</td>
+<td class="c-file">tickets/pass-jungfrau.png</td>
+</tr>
+<tr class="row-ch">
+<td class="c-date"><b>10/7</b> 周四<span class="dn">Day 14</span></td>
+<td class="c-city">布里恩茨 → 苏黎世机场</td>
+<td class="c-slot">上午<br>景观<br>接驳<br>✈️</td>
+<td class="c-plan">🧳 布里恩茨 <span class="warn">早退房</span>（需赶 10:04 龙疆班次）；布里恩茨 → 龙疆（经 Brünig）<br>🚞 <span class="hl">PE2919 琉森-因特拉肯景观快车</span> 龙疆 10:04 → 琉森 10:55（全景座）<br>🚄 琉森 11:09 → 苏黎世 HB 11:51 → <span class="hl">苏黎世机场 12:21</span>；办登机<br>🛫 EK88 苏黎世 <span class="hl">15:30</span> → 迪拜 23:45；转 EK310 迪拜 03:45 → 杭州 15:55（10/8 抵）</td>
+<td class="c-trans">🚄 <b>布里恩茨 → 龙疆</b>：经 Brünig 山口｜CHF 14.8/人<br>🚞 <b>PE2919 琉森-因特拉肯景观快车</b>：龙疆 Lungern <span class="hl">10:04</span> → 琉森 Luzern <span class="hl">10:55</span>｜3 车厢 全景座 · 座位预订 CHF 16/人<br>🚄 <b>Supersaver 联程</b>：龙疆 <span class="hl">10:04</span> → 苏黎世机场 <span class="hl">12:21</span>｜PE2919 → IR2620 → IR3267 · CHF 33.8/人<br>✈️ <b>阿联酋航空 EK88</b>：苏黎世 <span class="hl">15:30</span> → 迪拜 T3 <span class="hl">23:45</span>｜距 12:21 抵机场约 3 小时<br>✈️ <b>阿联酋航空 EK310</b>：迪拜 T3 <span class="hl">03:45</span> → 杭州萧山 T4 <span class="hl">15:55</span>｜10/8 抵达</td>
+<td class="c-stay">—（当日离境）</td>
+<td class="c-weather">10–18°C<br>分层保暖，方便穿脱</td>
+<td class="c-file">tickets/flight.png<br>tickets/train-brienz-lungern.png<br>tickets/train-scenic.png<br>tickets/train-supersaver.png</td>
+</tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="notes">
+<h3>⚠️ 重要提醒 / Important</h3>
+<div class="cols"><div class="note red"><span class="b"></span><span><span class="hl">少女峰登顶（Jungfraujoch）段未预订</span><br>Pass 仅覆盖至 Eigergletscher，登顶段需现场补票（Pass 持有约 CHF 75）。出发前查当日运营与时段。</span></div><div class="note warn"><span class="b"></span><span><span class="hl">乌菲兹美术馆 9/30 15:30</span>：两人是<span class="hl">两份独立订单</span>，入场需各自出示二维码；紧接旧宫塔楼 13:45，中间步行约 5 分钟。</span></div><div class="note warn"><span class="b"></span><span><span class="hl">多处早退房赶车</span>：10/1（09:38 发）、10/3（09:25 发）、10/7（需赶 10:04 龙观列车）—— 请提前于退房时间前出发。</span></div><div class="note "><span class="b"></span><span><span class="hl">现场购票项</span>：Leonardo Express、卡普里渡船/蓝洞、米兰大教堂登顶、圣母百花大教堂穹顶、万神庙、那不勒斯考古博物馆、布里恩茨蒸汽小火车。</span></div></div>
+<h3>✅ 行前 To-Do / Checklist</h3>
+<div class="cols"><div class="note todo"><span class="b"></span><span>决定是否登顶少女峰 Jungfraujoch（现场补票约 CHF 75）</span></div><div class="note todo"><span class="b"></span><span>确认 10/6 布里恩茨罗特洪蒸汽小火车 10 月运营时刻</span></div><div class="note todo"><span class="b"></span><span>申根签证、欧洲漫游 SIM、境外支付/现金（瑞士用 CHF）</span></div><div class="note todo"><span class="b"></span><span>装备：羽绒服 + 抓绒 + 防风防水外层 + 手套 + 帽子（少女峰 -5°C）；登山鞋；泳衣防晒（卡普里）</span></div><div class="note todo"><span class="b"></span><span>打印 / 离线保存全部票据；护照证件随身</span></div></div>
+  </div>
+  <div class="foot">实际出票版 · 交通 / 景观 / 住宿均以已支付票据为准<br>票据图片可长按保存到相册 · 双指缩放查看细节</div>
+</div>
+
+</body>
+</html>

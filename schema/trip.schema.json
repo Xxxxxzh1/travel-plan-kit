@@ -1,0 +1,263 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/Janz/travel-plan-kit/schema/trip.schema.json",
+  "title": "travel-plan-kit trip",
+  "description": "A trip definition. One file generates every output format. See references/data-model.md for prose documentation.",
+  "type": "object",
+  "required": ["meta", "days"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": { "$ref": "#/definitions/meta" },
+    "summary": { "$ref": "#/definitions/summary" },
+    "hero": { "$ref": "#/definitions/hero" },
+    "flights": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/flight" }
+    },
+    "lodging": {
+      "type": "array",
+      "description": "Declared once, referenced by id from days[].lodging.",
+      "items": { "$ref": "#/definitions/lodging" }
+    },
+    "tickets": {
+      "type": "array",
+      "description": "Declared once, referenced by id from days[].tickets.*",
+      "items": { "$ref": "#/definitions/ticket" }
+    },
+    "days": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/day" }
+    },
+    "notes": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/note" }
+    },
+    "footer": { "type": "string" }
+  },
+
+  "definitions": {
+    "isoDate": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "ISO date, YYYY-MM-DD"
+    },
+    "when": {
+      "type": "object",
+      "required": ["date"],
+      "additionalProperties": false,
+      "properties": {
+        "date": { "$ref": "#/definitions/isoDate" },
+        "time": { "type": "string", "description": "e.g. \"16:00\" or \"15:30 – 22:00\"" }
+      }
+    },
+
+    "meta": {
+      "type": "object",
+      "required": ["start", "end"],
+      "additionalProperties": true,
+      "properties": {
+        "title": { "type": "string", "description": "Latin-script title" },
+        "title_zh": { "type": "string", "description": "Primary-language title" },
+        "slug": { "type": "string" },
+        "emoji": { "type": "string" },
+        "start": { "$ref": "#/definitions/isoDate" },
+        "end": { "$ref": "#/definitions/isoDate" },
+        "travelers": { "type": "array", "items": { "type": "string" } },
+        "route": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Breadcrumb shown in the roadbook header."
+        },
+        "countries": {
+          "type": "object",
+          "description": "Country code -> display label, used by the filter chips.",
+          "additionalProperties": { "type": "string" }
+        },
+        "departure_note": {
+          "type": "string",
+          "description": "Shown on a day with no lodging, i.e. the departure day."
+        }
+      }
+    },
+
+    "summary": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "entry": { "$ref": "#/definitions/summaryLeg" },
+        "exit": { "$ref": "#/definitions/summaryLeg" },
+        "countries": {
+          "type": "string",
+          "description": "Prefer nights over days; a border-crossing day would double-count."
+        },
+        "transport_modes": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "summaryLeg": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "date": { "type": "string" },
+        "place": { "type": "string" },
+        "time": { "type": "string" },
+        "flight": { "type": "string" }
+      }
+    },
+
+    "hero": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "who": { "type": "array", "items": { "type": "string" } },
+        "stats": { "type": "array", "items": { "type": "string" } },
+        "meta": { "type": "string", "description": "Overrides the derived breadcrumb." }
+      }
+    },
+
+    "flight": {
+      "type": "object",
+      "required": ["date", "code"],
+      "additionalProperties": true,
+      "properties": {
+        "date": { "type": "string" },
+        "code": { "type": "string" },
+        "from": { "type": "string" },
+        "to": { "type": "string" },
+        "dep": { "type": "string" },
+        "arr": { "type": "string" }
+      }
+    },
+
+    "lodging": {
+      "type": "object",
+      "required": ["id", "city", "address"],
+      "additionalProperties": true,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$",
+          "description": "Referenced from days[].lodging. Must be unique."
+        },
+        "city": { "type": "string" },
+        "city_en": { "type": "string", "description": "Used to qualify the map query." },
+        "country": { "type": "string" },
+        "type": { "type": "string", "description": "e.g. 民宿 / 酒店" },
+        "type_en": { "type": "string" },
+        "platform": { "type": "string" },
+        "host": { "type": "string", "description": "Omit for a hotel." },
+        "address": { "type": "string" },
+        "map_query": {
+          "type": "string",
+          "description": "Defaults to address + city. Include the city: a bare street name geocodes wrong."
+        },
+        "checkin": { "$ref": "#/definitions/when" },
+        "checkout": { "$ref": "#/definitions/when" },
+        "nights": { "type": "integer", "minimum": 1, "description": "Validated against the dates." },
+        "phone": { "type": "string" },
+        "note": { "type": "string" },
+        "tickets": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "ticket": {
+      "type": "object",
+      "required": ["id", "label", "category"],
+      "anyOf": [{ "required": ["file"] }, { "required": ["files"] }],
+      "additionalProperties": true,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" },
+        "category": {
+          "enum": ["transport", "scenic", "stay"],
+          "description": "Decides which drawer tab the ticket appears under."
+        },
+        "label": { "type": "string", "description": "Caption under the thumbnail." },
+        "file": { "type": "string", "description": "Single-page ticket image or PDF." },
+        "files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Multi-page ticket; each page becomes its own entry with '· 第 N 页'."
+        }
+      }
+    },
+
+    "day": {
+      "type": "object",
+      "required": ["date", "city"],
+      "additionalProperties": true,
+      "properties": {
+        "n": { "type": "integer", "description": "Display number; defaults to position." },
+        "date": { "$ref": "#/definitions/isoDate" },
+        "city": { "type": "string", "description": "May contain ' → ' on travel days." },
+        "country": {
+          "type": "string",
+          "description": "Lowercase country code; drives row colour and the filter chips."
+        },
+        "weather": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "temp": { "type": "string" },
+            "wear": { "type": "string" },
+            "cold": { "type": "boolean", "description": "Renders a red freeze chip." }
+          }
+        },
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["text"],
+            "additionalProperties": false,
+            "properties": {
+              "key": { "type": "string", "description": "上午 / 下午 / 晚 / 全天 …" },
+              "icon": { "type": "string" },
+              "text": { "type": "string" }
+            }
+          }
+        },
+        "transport": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["title"],
+            "additionalProperties": false,
+            "properties": {
+              "icon": { "type": "string" },
+              "title": { "type": "string" },
+              "sub": { "type": "string", "description": "Route and times — the line that matters." },
+              "meta": { "type": "string" },
+              "badge": { "type": "string", "description": "已购 (green) / 现场 (amber) / 补票 (red)" }
+            }
+          }
+        },
+        "lodging": {
+          "type": "string",
+          "description": "An id from the top-level lodging list. Omit on a departure day."
+        },
+        "tickets": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "transport": { "type": "array", "items": { "type": "string" } },
+            "scenic": { "type": "array", "items": { "type": "string" } },
+            "stay": { "type": "array", "items": { "type": "string" } }
+          }
+        }
+      }
+    },
+
+    "note": {
+      "type": "object",
+      "required": ["text"],
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "enum": ["red", "warn", "todo", ""],
+          "description": "red/warn/'' group under 重要提醒; todo becomes a checklist item."
+        },
+        "text": { "type": "string" }
+      }
+    }
+  }
+}

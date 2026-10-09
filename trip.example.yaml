@@ -1,0 +1,102 @@
+# =============================================================================
+#  travel-plan-kit — minimal template
+#
+#  Copy this next to your tickets, fill it in, then:
+#      python3 scripts/model.py my-trip.yaml     # validate (recommended)
+#      python3 scripts/build.py my-trip.yaml     # build everything
+#
+#  Text fields accept two markers, and nothing else is treated as markup:
+#      **highlighted**   -> accent colour
+#      !!attention!!     -> amber warning
+#  `<br>` is the only HTML tag allowed (for line breaks in notes).
+#
+#  Full field reference: references/data-model.md
+#  A complete 14-day example: examples/italy-switzerland/trip.yaml
+# =============================================================================
+
+meta:
+  title: Japan & Taiwan          # Latin-script title
+  title_zh: 日本 · 台湾           # primary-language title
+  slug: japan-taiwan
+  emoji: "🇯🇵"
+  start: 2027-04-02
+  end: 2027-04-09
+  travelers: [Alice, Bob]
+  route: [东京, 京都, 台北]        # shown in the roadbook header
+  countries:                     # country-code -> label, for the filter chips
+    jp: 日本
+    tw: 台湾
+
+summary:
+  entry: {date: 2027-04-02, place: "Tokyo Narita (NRT), Japan", time: "14:30", flight: CI100}
+  exit:  {date: 2027-04-09, place: "Taipei Taoyuan (TPE), Taiwan", time: "18:20", flight: CI101}
+  countries: "Japan (5 nights) · Taiwan (2 nights)"
+  status: All flights, train tickets and accommodation are fully paid and confirmed.
+
+# -----------------------------------------------------------------------------
+# Accommodation — declared ONCE, referenced from days by `id`.
+# Never paste a stay into every day it covers; that is how addresses end up
+# edited in three places.
+# -----------------------------------------------------------------------------
+lodging:
+  - id: tokyo
+    city: 东京
+    city_en: Tokyo
+    country: JP
+    type: 酒店
+    type_en: Hotel
+    host:                        # omit for a hotel; set for a guesthouse/Airbnb
+    address: 1-2-3 Shinjuku, Tokyo, Japan
+    checkin:  {date: 2027-04-02, time: "15:00"}
+    checkout: {date: 2027-04-06, time: "10:00"}
+    nights: 4                    # validated against the dates above
+    tickets: [stay-tokyo]
+
+# -----------------------------------------------------------------------------
+# Tickets — id -> image file(s). Paths are relative to this file.
+# Use `files: [...]` for a multi-page PDF; each page becomes its own entry.
+# -----------------------------------------------------------------------------
+tickets:
+  - {id: flight,     category: transport, label: 机票 · 往返,         file: tickets/flight.png}
+  - {id: shinkansen, category: transport, label: 新干线 东京 → 京都,   file: tickets/shinkansen.pdf}
+  - {id: museum,     category: scenic,    label: 东京国立博物馆 4/4,   file: tickets/museum.png}
+  - {id: stay-tokyo, category: stay,      label: 东京住宿 4/2–4/6,     file: tickets/stay-tokyo.png}
+
+# -----------------------------------------------------------------------------
+# Days — `lodging` is an id reference into the list above.
+# -----------------------------------------------------------------------------
+days:
+  - n: 1
+    date: 2027-04-02
+    city: 东京
+    country: jp                  # drives the row colour and the filter chips
+    weather: {temp: "12–19°C", wear: 薄外套}
+    slots:
+      - {key: 下午, icon: "🛬", text: 14:30 抵达成田机场 → 入住}
+    transport:
+      - {icon: "✈️", title: 中华航空 CI100, sub: 台北 **09:20** → 东京 **14:30**,
+         meta: 转机 1 次, badge: 已购}
+    lodging: tokyo
+    tickets: {transport: [flight], scenic: [], stay: [stay-tokyo]}
+
+  - n: 2
+    date: 2027-04-03
+    city: 东京
+    country: jp
+    weather: {temp: "12–19°C", wear: 薄外套}
+    slots:
+      - {key: 上午, icon: "🏛", text: "**东京国立博物馆** 10:00 入场"}
+      - {key: 晚,   icon: "🍜", text: 新宿周边晚餐}
+    transport:
+      - {icon: "🚶", title: 步行 + 地铁, sub: 市区内移动, meta: 单程 ¥180}
+    lodging: tokyo
+    tickets: {scenic: [museum]}
+
+# -----------------------------------------------------------------------------
+# Reminders. level: red | warn | todo   (todo renders as a checklist item)
+# -----------------------------------------------------------------------------
+notes:
+  - {level: warn, text: "**早退房赶车**：4/6 新干线 08:12 发，需提前退房。"}
+  - {level: todo, text: 确认博物馆是否需要提前预约}
+
+footer: "示例模板 · 请替换为你自己的行程"

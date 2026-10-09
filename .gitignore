@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+._*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# Build scratch — generated intermediates, not source
+.cache/
+
+# Your own trip data: keep the repo clean when you fork it to plan a real trip.
+# Comment these out if you *want* to commit a private trip.
+# trips/

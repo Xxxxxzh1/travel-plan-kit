@@ -1,0 +1,73 @@
+/* ---------------------------------------------------------------------------
+   Design tokens shared by every generated document.
+
+   Two accents carry meaning throughout: green = Italy, blue = Switzerland.
+   Generated documents colour-code every itinerary row by country, so a reader
+   can see at a glance which half of the trip they are looking at.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* country accents */
+  --it:        #2d6a4f;
+  --it-soft:   #e7f4ec;
+  --it-line:   #a7d7bb;
+
+  --ch:        #1565c0;
+  --ch-soft:   #e6f1fb;
+  --ch-line:   #9dc7ee;
+
+  /* semantic */
+  --ok:        #2e7d32;
+  --ok-soft:   #e8f5e9;
+  --warn:      #b45309;
+  --warn-soft: #fdf3e3;
+  --stop:      #c62828;
+  --stop-soft: #fdeceb;
+
+  /* neutrals (light) */
+  --ink:       #111827;
+  --ink-2:     #4b5563;
+  --ink-3:     #8b95a3;
+  --bg:        #f2f4f7;
+  --card:      #ffffff;
+  --hair:      #e8ebef;
+
+  /* geometry */
+  --r:         16px;
+  --r-sm:      11px;
+  --shadow:    0 1px 2px rgba(16,24,40,.05), 0 6px 20px -8px rgba(16,24,40,.14);
+  --shadow-lg: 0 10px 40px -10px rgba(16,24,40,.28);
+
+  /* mobile safe areas */
+  --safe-t: env(safe-area-inset-top, 0px);
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --it:        #4ade80;
+    --it-soft:   #14301f;
+    --it-line:   #2f6b45;
+
+    --ch:        #60a5fa;
+    --ch-soft:   #12243d;
+    --ch-line:   #2b5a8c;
+
+    --ok:        #4ade80;
+    --ok-soft:   #14301f;
+    --warn:      #fbbf24;
+    --warn-soft: #33280f;
+    --stop:      #f87171;
+    --stop-soft: #3a1a1a;
+
+    --ink:       #eef2f6;
+    --ink-2:     #aab4c0;
+    --ink-3:     #7c8794;
+    --bg:        #0d1016;
+    --card:      #171b22;
+    --hair:      #252b34;
+
+    --shadow:    0 1px 2px rgba(0,0,0,.4), 0 6px 20px -8px rgba(0,0,0,.6);
+    --shadow-lg: 0 10px 40px -10px rgba(0,0,0,.75);
+  }
+}

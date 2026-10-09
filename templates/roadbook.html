@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f172a">
+<title>@@TITLE@@ · 路书</title>
+<style>
+/* @@TOKENS@@ */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);max-width:100%;overflow-x:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  font-size:15px;line-height:1.55;overscroll-behavior-y:none;
+}
+body.locked{overflow:hidden}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+a{text-decoration:none}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;color:#fff;padding:calc(var(--safe-t) + 20px) 18px 18px;
+      background:linear-gradient(150deg,#0f766e 0%,#1d4ed8 58%,#3730a3 100%);overflow:hidden}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(680px 260px at 88% -12%,rgba(255,255,255,.28),transparent 62%)}
+.hero-in{position:relative;z-index:1}
+.hero h1{margin:0 0 4px;font-size:23px;font-weight:800;letter-spacing:.2px;line-height:1.25}
+.hero .meta{font-size:12.5px;opacity:.88;letter-spacing:.3px}
+.hero .who{display:flex;align-items:center;gap:7px;margin-top:9px;font-size:12px;opacity:.95;flex-wrap:wrap}
+.pill{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.26);border-radius:999px;
+      padding:3px 11px;font-size:11.5px;backdrop-filter:blur(6px)}
+.countdown{margin-top:14px;display:flex;align-items:center;gap:10px;
+      background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);
+      border-radius:13px;padding:9px 13px;backdrop-filter:blur(8px)}
+.countdown .num{font-size:22px;font-weight:800;letter-spacing:-.5px;line-height:1}
+.countdown .txt{font-size:12px;opacity:.92;line-height:1.35}
+.hero-stats{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+/* ---------- FILTER BAR ---------- */
+.filterbar{position:sticky;top:0;z-index:40;padding:9px 14px;display:flex;align-items:center;gap:8px;
+  background:color-mix(in srgb,var(--bg) 86%,transparent);
+  backdrop-filter:saturate(180%) blur(14px);-webkit-backdrop-filter:saturate(180%) blur(14px);
+  border-bottom:1px solid var(--hair)}
+.seg{display:flex;gap:4px;background:color-mix(in srgb,var(--ink) 7%,transparent);border-radius:11px;padding:3px;flex:1;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{flex:1;padding:7px 8px;border-radius:8px;font-size:12.5px;font-weight:600;
+  color:var(--ink-2);transition:.18s;white-space:nowrap}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(16,24,40,.16)}
+.alltk{display:flex;align-items:center;gap:5px;padding:9px 13px;border-radius:11px;
+  background:linear-gradient(135deg,#4f46e5,#1d4ed8);color:#fff;font-size:12.5px;font-weight:700;
+  box-shadow:0 4px 14px -4px rgba(79,70,229,.6);white-space:nowrap}
+
+/* ---------- TIMELINE ---------- */
+.wrap{padding:14px 14px calc(28px + var(--safe-b))}
+.day{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;animation:rise .42s both}
+@keyframes rise{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+.rail{position:relative;display:flex;justify-content:center}
+.rail::before{content:"";position:absolute;top:36px;bottom:-18px;width:2px;background:var(--hair);border-radius:2px}
+.day:last-of-type .rail::before{display:none}
+.dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+  font-size:12px;font-weight:800;letter-spacing:-.3px;background:var(--card);
+  border:2px solid var(--c,var(--ch));color:var(--c,var(--ch));
+  position:sticky;top:60px;z-index:2;box-shadow:var(--shadow)}
+.day.now .dot{background:var(--c,var(--ch));color:#fff;
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--c,var(--ch)) 22%,transparent),var(--shadow)}
+.day.hide{display:none}
+
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:14px;
+  overflow:hidden;border:1px solid var(--hair);min-width:0}
+.card-hd{padding:12px 14px 10px;display:flex;align-items:flex-start;gap:9px}
+.card-hd .dt{font-size:11.5px;font-weight:700;color:var(--ink-3);letter-spacing:.4px}
+.card-hd .city{font-size:16.5px;font-weight:800;letter-spacing:-.2px;line-height:1.25;margin-top:1px}
+.card-hd .right{margin-left:auto;text-align:right;flex-shrink:0}
+.wx{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--ink-2);
+  background:color-mix(in srgb,var(--ink) 6%,transparent);border-radius:999px;padding:3px 8px;white-space:nowrap}
+.wx.cold{background:var(--stop-soft);color:var(--stop)}
+.nowtag{display:inline-block;background:var(--stop);color:#fff;font-size:10px;font-weight:800;
+  border-radius:6px;padding:2px 7px;letter-spacing:.4px;margin-bottom:3px}
+.card-bd{padding:0 14px 12px}
+.slot{display:flex;gap:9px;padding:5px 0;font-size:13.8px;line-height:1.5}
+.slot .k{flex:0 0 34px;font-size:10.5px;font-weight:800;color:var(--ink-3);letter-spacing:.3px;padding-top:3px}
+.slot .v{flex:1;color:var(--ink);min-width:0}
+.hl{color:var(--c,var(--ch));font-weight:700}
+.warn{color:var(--warn);font-weight:700}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;
+  background:color-mix(in srgb,var(--ink) 5%,transparent);border:1px solid var(--hair);
+  border-radius:9px;padding:5px 9px;color:var(--ink-2);text-align:left}
+.chip.tr{background:var(--c-soft,var(--ch-soft));border-color:var(--c-line,var(--ch-line));color:var(--c,var(--ch))}
+
+.stay{display:flex;gap:8px;align-items:flex-start;margin-top:9px;padding:9px 10px;
+  background:color-mix(in srgb,var(--ink) 4%,transparent);border-radius:var(--r-sm);
+  font-size:12.4px;line-height:1.45}
+.stay .ic{flex-shrink:0;font-size:13px;line-height:1.4}
+.stay .nm{font-weight:700}
+.stay .ad{color:var(--ink-3);font-size:11.6px;margin-top:1px}
+.maplink{color:var(--blue,#1a73e8);border-bottom:1px dashed color-mix(in srgb,var(--blue,#1a73e8) 50%,transparent)}
+.maplink:active{opacity:.55}
+.navbtn{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:9px;padding:12px;
+  border-radius:12px;background:linear-gradient(135deg,#1a73e8,#1557b0);color:#fff;
+  font-size:13.5px;font-weight:700;box-shadow:0 4px 14px -5px rgba(26,115,232,.55)}
+.navbtn:active{transform:scale(.985)}
+
+.tkbtn{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;padding:11px 13px;
+  border-radius:12px;font-size:13.5px;font-weight:700;color:var(--ink);border:1px solid var(--hair);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--c,var(--ch)) 12%,var(--card)),
+             color-mix(in srgb,#7c3aed 12%,var(--card)))}
+.tkbtn .cnt{margin-left:auto;font-size:11.5px;font-weight:800;background:var(--ink);color:var(--card);
+  border-radius:999px;padding:2px 9px}
+.tkbtn .arw{color:var(--ink-3);font-size:15px}
+.tkbtn.none{opacity:.55}
+
+/* ---------- NOTES ---------- */
+.notes{background:var(--card);border:1px solid var(--hair);border-radius:var(--r);
+  box-shadow:var(--shadow);overflow:hidden}
+.notes summary{padding:14px;font-weight:700;font-size:14px;list-style:none;display:flex;align-items:center;gap:8px}
+.notes summary::-webkit-details-marker{display:none}
+.notes summary .arw{margin-left:auto;color:var(--ink-3);transition:.2s}
+.notes[open] summary .arw{transform:rotate(90deg)}
+.notes .in{padding:0 14px 14px}
+.note{display:flex;gap:9px;padding:8px 0;font-size:13px;line-height:1.55;border-top:1px solid var(--hair)}
+.note .b{flex-shrink:0;width:5px;border-radius:3px;background:var(--warn);margin:4px 0}
+.note.todo .b{background:var(--ch)}
+.note.red .b{background:var(--stop)}
+
+/* ---------- DRAWER ---------- */
+.backdrop{position:fixed;inset:0;background:rgba(8,12,20,.5);backdrop-filter:blur(3px);
+  opacity:0;pointer-events:none;transition:opacity .3s;z-index:90}
+.backdrop.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;left:0;right:0;bottom:0;height:90vh;height:90dvh;z-index:100;
+  background:var(--bg);border-radius:20px 20px 0 0;box-shadow:var(--shadow-lg);
+  transform:translateY(101%);transition:transform .36s cubic-bezier(.32,.72,0,1);
+  display:flex;flex-direction:column;overflow:hidden}
+.drawer.on{transform:none}
+.grab{padding:8px 0 4px;display:grid;place-items:center;flex-shrink:0;touch-action:none;cursor:grab}
+.grab i{width:38px;height:4.5px;border-radius:3px;background:var(--ink-3);opacity:.45;display:block}
+.dhd{padding:4px 16px 12px;flex-shrink:0;border-bottom:1px solid var(--hair);display:flex;align-items:flex-start;gap:10px}
+.dhd .t{flex:1;min-width:0}
+.dhd .d1{font-size:16.5px;font-weight:800;letter-spacing:-.2px}
+.dhd .d2{font-size:12px;color:var(--ink-3);margin-top:2px}
+.xbtn{width:32px;height:32px;border-radius:50%;background:color-mix(in srgb,var(--ink) 8%,transparent);
+  display:grid;place-items:center;font-size:15px;color:var(--ink-2);flex-shrink:0}
+.dtabs{display:flex;gap:6px;padding:10px 16px 4px;overflow-x:auto;flex-shrink:0;scrollbar-width:none}
+.dtabs::-webkit-scrollbar{display:none}
+.dtab{padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:700;white-space:nowrap;
+  background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--ink-2);border:1px solid transparent}
+.dtab.on{background:var(--ink);color:var(--card)}
+.dbd{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px 16px calc(30px + var(--safe-b))}
+.dsec{margin-bottom:18px}
+.dsec-t{font-size:12px;font-weight:800;letter-spacing:.6px;color:var(--ink-3);margin:0 0 8px;
+  display:flex;align-items:center;gap:7px}
+.dsec-t::after{content:"";flex:1;height:1px;background:var(--hair)}
+.trow{background:var(--card);border:1px solid var(--hair);border-radius:13px;padding:11px 12px;
+  margin-bottom:8px;box-shadow:var(--shadow);display:flex;gap:10px}
+.trow .ti{font-size:17px;flex-shrink:0;line-height:1.3}
+.trow .tb{flex:1;min-width:0}
+.trow .t1{font-size:13.8px;font-weight:700;line-height:1.35}
+.trow .t2{font-size:12.2px;color:var(--ink-2);margin-top:2px;line-height:1.5}
+.trow .t3{font-size:11.4px;color:var(--ink-3);margin-top:3px;line-height:1.45;word-break:break-word}
+.badge{display:inline-block;font-size:10.5px;font-weight:800;border-radius:6px;padding:1.5px 7px;
+  margin-right:5px;vertical-align:1px}
+.bdg-ok{background:var(--ok-soft);color:var(--ok)}
+.bdg-wn{background:var(--warn-soft);color:var(--warn)}
+.bdg-rd{background:var(--stop-soft);color:var(--stop)}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.gitem{position:relative;border-radius:12px;overflow:hidden;background:var(--card);
+  border:1px solid var(--hair);box-shadow:var(--shadow);text-align:left;padding:0}
+.gitem img{width:100%;height:142px;object-fit:contain;background:#fff}
+.gitem .cap{padding:7px 8px;font-size:10.8px;line-height:1.35;color:var(--ink-2);font-weight:600}
+.gitem .pg{position:absolute;top:6px;right:6px;background:rgba(8,12,20,.68);color:#fff;font-size:9.5px;
+  font-weight:700;border-radius:6px;padding:2px 6px;backdrop-filter:blur(4px)}
+.gitem .zm{position:absolute;bottom:44px;right:6px;background:rgba(8,12,20,.6);color:#fff;
+  font-size:10px;border-radius:7px;padding:3px 7px;backdrop-filter:blur(4px)}
+.empty{text-align:center;color:var(--ink-3);font-size:12.8px;padding:30px 10px;line-height:1.7}
+
+/* ---------- LIGHTBOX ---------- */
+.lb{position:fixed;inset:0;background:#06080d;z-index:200;display:none;flex-direction:column}
+.lb.on{display:flex}
+.lb-hd{padding:calc(var(--safe-t) + 10px) 14px 10px;display:flex;align-items:center;gap:10px;
+  color:#fff;flex-shrink:0}
+.lb-hd .n{font-size:12.5px;font-weight:700;opacity:.9}
+.lb-hd .hint{margin-left:auto;font-size:10.5px;opacity:.6;text-align:right;line-height:1.35}
+.lb-hd .xbtn{background:rgba(255,255,255,.15);color:#fff}
+.lb-bd{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;padding:0 8px calc(20px + var(--safe-b))}
+.lb-bd img{width:100%;height:auto;border-radius:8px;background:#fff;margin-bottom:10px}
+.lb-ft{flex-shrink:0;display:flex;gap:10px;padding:10px 14px calc(14px + var(--safe-b));
+  border-top:1px solid rgba(255,255,255,.12)}
+.lb-ft button{flex:1;padding:12px;border-radius:12px;background:rgba(255,255,255,.12);
+  color:#fff;font-size:13.5px;font-weight:700}
+.lb-ft button:disabled{opacity:.3}
+.foot{text-align:center;color:var(--ink-3);font-size:11px;padding:6px 20px 24px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-in">
+    <h1 id="hTitle"></h1>
+    <div class="meta" id="hMeta"></div>
+    <div class="who" id="hWho"></div>
+    <div class="countdown" id="cd">
+      <div class="num" id="cdNum">—</div>
+      <div class="txt" id="cdTxt">计算中…</div>
+    </div>
+    <div class="hero-stats" id="hStats"></div>
+  </div>
+</header>
+
+<nav class="filterbar">
+  <div class="seg" id="seg"></div>
+  <button class="alltk" id="btnAll">🎫 全部票据</button>
+</nav>
+
+<main class="wrap" id="list"></main>
+
+<div class="wrap" style="padding-top:0">
+  <details class="notes">
+    <summary>⚠️ 重要提醒与行前清单 <span class="arw">›</span></summary>
+    <div class="in" id="notesIn"></div>
+  </details>
+  <div class="foot" id="footIn"></div>
+</div>
+
+<div class="backdrop" id="bd"></div>
+
+<aside class="drawer" id="dw">
+  <div class="grab" id="grab"><i></i></div>
+  <div class="dhd">
+    <div class="t"><div class="d1" id="dwT">—</div><div class="d2" id="dwS">—</div></div>
+    <button class="xbtn" id="dwX">✕</button>
+  </div>
+  <div class="dtabs" id="dwTabs"></div>
+  <div class="dbd" id="dwB"></div>
+</aside>
+
+<div class="lb" id="lb">
+  <div class="lb-hd">
+    <div class="n" id="lbN">—</div>
+    <div class="hint">长按图片可保存<br>双指缩放看细节</div>
+    <button class="xbtn" id="lbX">✕</button>
+  </div>
+  <div class="lb-bd" id="lbB"></div>
+  <div class="lb-ft">
+    <button id="lbPrev">‹ 上一张</button>
+    <button id="lbNext">下一张 ›</button>
+  </div>
+</div>
+
+<script>
+/* @@ASSETS@@ */
+/* @@DATA@@ */
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const CN = {transport:'🚄 交通', scenic:'🎫 景观', stay:'🏨 住宿'};
+const CATS = ['transport','scenic','stay'];
+const FLAG = {it:'🇮🇹', ch:'🇨🇭'};
+
+/* Stay is stored once and referenced by id — never inlined per day. */
+const stayOf = d => (d.lodging && TRIP.lodging[d.lodging]) || null;
+/* Ticket captions live once per ticket, not repeated on every day that uses it. */
+const tkOf = slug => TRIP.tickets[slug] || {label: slug};
+
+function tkList(day, cat){
+  const g = day.tickets || {};
+  const out = [];
+  (cat ? [cat] : CATS).forEach(c => {
+    (g[c] || []).forEach(slug => {
+      const t = tkOf(slug);
+      out.push({cat: c, slug, cap: t.label, page: t.page, pages: t.pages});
+    });
+  });
+  return out;
+}
+const tkCount = d => tkList(d).length;
+const mapUrl = s => 'https://www.google.com/maps/search/?api=1&query=' +
+  encodeURIComponent(s.map || s.address);
+const mapLink = s => '<a class="maplink" href="' + mapUrl(s) +
+  '" target="_blank" rel="noopener">📍' + esc(s.address) + ' ↗</a>';
+
+/* ---------- hero ---------- */
+$('#hTitle').innerHTML = TRIP.hero.title;
+$('#hMeta').textContent = TRIP.hero.meta;
+$('#hWho').innerHTML = (TRIP.hero.who || []).map(t => '<span class="pill">' + t + '</span>').join('');
+$('#hStats').innerHTML = (TRIP.hero.stats || []).map(t => '<span class="pill">' + t + '</span>').join('') +
+  '<span class="pill" id="tkTotal">🎫 票据</span>';
+$('#notesIn').innerHTML = (TRIP.notes || []).map(n =>
+  '<div class="note ' + (n.c || '') + '"><span class="b"></span><span>' + (n.v || '') + '</span></div>').join('');
+$('#footIn').innerHTML = TRIP.foot || '';
+$('#tkTotal').textContent = '🎫 ' + TRIP.days.reduce((s, d) => s + tkCount(d), 0) + ' 张票据';
+
+/* ---------- countdown ---------- */
+(function(){
+  const start = new Date(TRIP.start + 'T00:00:00');
+  const end = new Date(TRIP.end + 'T23:59:59');
+  const now = new Date();
+  const s0 = new Date(start); s0.setHours(0,0,0,0);
+  const n0 = new Date(now); n0.setHours(0,0,0,0);
+  const diff = Math.round((s0 - n0) / 864e5);
+  const N = $('#cdNum'), T = $('#cdTxt');
+  if (now < start) {
+    N.textContent = 'D-' + diff;
+    T.innerHTML = '距离出发还有 <b>' + diff + '</b> 天<br>一切票据已就绪 ✅';
+  } else if (now <= end) {
+    let cur = 1;
+    TRIP.days.forEach(d => { if (new Date(d.date + 'T00:00:00') <= now) cur = d.n; });
+    N.textContent = 'Day ' + cur;
+    T.innerHTML = '行程进行中 · 今天是 <b>' + esc((TRIP.days[cur-1]||{}).city || '') + '</b><br>点下方卡片查看当天票据';
+  } else {
+    N.textContent = '✓';
+    T.innerHTML = '行程已结束<br>愿旅途留下美好回忆';
+  }
+})();
+
+/* ---------- country filter ---------- */
+(function(){
+  const segs = [['all','全部']].concat(TRIP.countries.map(c => [c, (FLAG[c]||'') + ' ' + (TRIP.countryNames[c]||c)]));
+  $('#seg').innerHTML = segs.map(([k, label], i) =>
+    '<button data-f="' + k + '"' + (i === 0 ? ' class="on"' : '') + '>' + esc(label) + '</button>').join('');
+})();
+
+/* ---------- day list ---------- */
+const nowD = new Date(), today0 = new Date();
+today0.setHours(0,0,0,0);
+const isToday = d => new Date(d.date + 'T00:00:00').getTime() === today0.getTime();
+
+$('#list').innerHTML = TRIP.days.map((d, i) => {
+  const stay = stayOf(d);
+  const cnt = tkCount(d);
+  const ci = i % 2 === 0 ? 'var(--it)' : 'var(--ch)';
+  const slots = (d.slots || []).map(s =>
+    '<div class="slot"><div class="k">' + esc(s.k) + '</div><div class="v">' + (s.v || '') + '</div></div>').join('');
+  const chips = (d.transport || []).map(t =>
+    '<span class="chip tr"><span>' + (t.icon || '') + '</span><span>' + esc(t.title) + '</span></span>').join('');
+  const stayBox = stay
+    ? '<div class="stay"><div class="ic">🏨</div><div><div class="nm">' + esc(stay.name) + '</div>' +
+      '<div class="ad">' + mapLink(stay) + (stay.checkin && stay.checkin.time ? ' · 入住 ' + esc(stay.checkin.time) : '') + '</div>' +
+      (stay.note ? '<div class="ad">' + esc(stay.note) + '</div>' : '') + '</div></div>'
+    : '<div class="stay"><div class="ic">✈️</div><div><div class="nm">当日离境</div>' +
+      '<div class="ad">' + esc(TRIP.departureNote || '') + '</div></div></div>';
+
+  return '<div class="day" data-c="' + d.country + '" data-i="' + i + '" style="--c:' + ci + '">' +
+    '<div class="rail"><div class="dot">' + d.n + '</div></div>' +
+    '<div class="card"><div class="card-hd"><div>' +
+      (isToday(d) ? '<div class="nowtag">今天</div>' : '') +
+      '<div class="dt">' + esc(d.label) + ' ' + esc(d.wd) + '</div>' +
+      '<div class="city">' + (FLAG[d.country] || '') + ' ' + esc(d.city) + '</div></div>' +
+      '<div class="right"><span class="wx' + (d.weather.cold ? ' cold' : '') + '">' +
+        (d.weather.cold ? '🥶' : '🌤') + ' ' + esc(d.weather.t || '') + '</span></div>' +
+    '</div><div class="card-bd">' + slots +
+      (chips ? '<div class="chips">' + chips + '</div>' : '') + stayBox +
+      '<button class="tkbtn' + (cnt ? '' : ' none') + '" data-open="' + i + '">' +
+        '<span>🎫</span><span>查看当天票据</span><span class="cnt">' + cnt + '</span><span class="arw">›</span>' +
+      '</button>' +
+    '</div></div></div>';
+}).join('');
+
+document.querySelectorAll('.day').forEach((el, i) => {
+  el.style.animationDelay = Math.min(i * 38, 400) + 'ms';
+});
+
+$('#seg').addEventListener('click', e => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  $('#seg').querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
+  const f = b.dataset.f;
+  document.querySelectorAll('.day').forEach(el => {
+    el.classList.toggle('hide', f !== 'all' && el.dataset.c !== f);
+  });
+});
+
+/* ---------- drawer ---------- */
+const dw = $('#dw'), bd = $('#bd'), dwB = $('#dwB'), dwTabs = $('#dwTabs');
+let curDay = null, curTab = 'all';
+
+function closeAll(){
+  dw.classList.remove('on'); bd.classList.remove('on'); $('#lb').classList.remove('on');
+  document.body.classList.remove('locked');
+}
+$('#dwX').onclick = closeAll;
+bd.onclick = closeAll;
+
+(function(){
+  const g = $('#grab');
+  let y0 = null, dy = 0, t0 = 0;
+  g.addEventListener('touchstart', e => {
+    y0 = e.touches[0].clientY; t0 = Date.now(); dw.style.transition = 'none';
+  }, {passive: true});
+  g.addEventListener('touchmove', e => {
+    if (y0 === null) return;
+    dy = Math.max(0, e.touches[0].clientY - y0);
+    dw.style.transform = 'translateY(' + dy + 'px)';
+  }, {passive: true});
+  g.addEventListener('touchend', () => {
+    dw.style.transition = ''; dw.style.transform = '';
+    const fast = Date.now() - t0 < 260;
+    if (dy > 110 || (fast && dy > 34)) closeAll();
+    y0 = null; dy = 0;
+  });
+})();
+
+function renderDrawer(){
+  const d = curDay;
+  if (!d) return;
+  const stay = stayOf(d);
+  $('#dwT').textContent = (isToday(d) ? '今天 · ' : '') + d.label + ' ' + d.wd + ' · ' + d.city;
+  $('#dwS').textContent = 'Day ' + d.n + ' / ' + TRIP.days.length + ' · ' + (d.weather.t || '');
+
+  const cats = ['all'].concat(CATS.filter(c => tkList(d, c).length))
+    .filter((c, i, a) => a.indexOf(c) === i);
+  if (cats.indexOf(curTab) < 0) curTab = 'all';
+  dwTabs.innerHTML = cats.map(c =>
+    '<button class="dtab' + (c === curTab ? ' on' : '') + '" data-t="' + c + '">' +
+    (c === 'all' ? '全部' : CN[c]) + ' <span style="opacity:.6">' +
+    tkList(d, c === 'all' ? null : c).length + '</span></button>').join('');
+  dwTabs.style.display = cats.length > 1 ? '' : 'none';
+
+  const show = c => curTab === 'all' || curTab === c;
+  let out = '';
+
+  if ((d.slots || []).length) {
+    out += '<div class="dsec"><div class="dsec-t">行程安排</div>' +
+      d.slots.map(s => '<div class="trow"><div class="ti">' + (s.i || '·') + '</div>' +
+        '<div class="tb"><div class="t2" style="margin:0">' + (s.v || '') + '</div></div></div>').join('') +
+      '</div>';
+  }
+
+  if (show('transport') && (d.transport || []).length) {
+    out += '<div class="dsec"><div class="dsec-t">🚄 交通（车票 / 起终站 / 发车时刻）</div>' +
+      d.transport.map(t => '<div class="trow"><div class="ti">' + (t.icon || '') + '</div><div class="tb">' +
+        '<div class="t1">' + (t.badge ? '<span class="badge ' + (t.badgeC || 'bdg-ok') + '">' + esc(t.badge) + '</span>' : '') +
+        esc(t.title) + '</div>' +
+        (t.sub ? '<div class="t2">' + t.sub + '</div>' : '') +
+        (t.meta ? '<div class="t3">' + t.meta + '</div>' : '') +
+        '</div></div>').join('') + '</div>';
+  }
+
+  if (show('stay') && stay) {
+    out += '<div class="dsec"><div class="dsec-t">🏨 当天住宿</div>' +
+      '<div class="trow"><div class="ti">🏨</div><div class="tb">' +
+        '<div class="t1">' + esc(stay.name) + '</div>' +
+        '<div class="t2">' + mapLink(stay) + '</div>' +
+        '<div class="t3">' + esc(stay.checkinTime || '') + (stay.note ? ' · ' + esc(stay.note) : '') +
+        (stay.phone ? ' · ' + esc(stay.phone) : '') + '</div>' +
+      '</div></div>' +
+      '<a class="navbtn" href="' + mapUrl(stay) + '" target="_blank" rel="noopener">🧭 在 Google 地图中打开</a>' +
+      '</div>';
+  }
+
+  CATS.filter(c => show(c) && tkList(d, c).length).forEach(c => {
+    const list = tkList(d, c);
+    out += '<div class="dsec"><div class="dsec-t">' + CN[c] + ' 票据 · ' + list.length + ' 张</div><div class="gal">' +
+      list.map(t => '<button class="gitem" data-slug="' + esc(t.slug) + '">' +
+        '<img src="' + (ASSETS[t.slug] || '') + '" alt="" loading="lazy">' +
+        (t.pages > 1 ? '<span class="pg">' + t.page + '/' + t.pages + '</span>' : '') +
+        '<span class="zm">⤢</span><span class="cap">' + esc(t.cap) + '</span></button>').join('') +
+      '</div></div>';
+  });
+
+  if (!out) out = '<div class="empty">这一天暂无已出票项目<br><span style="font-size:11.5px">现场购票或自由活动</span></div>';
+  dwB.innerHTML = out;
+  dwB.scrollTop = 0;
+}
+
+dwTabs.addEventListener('click', e => {
+  const b = e.target.closest('.dtab');
+  if (!b) return;
+  curTab = b.dataset.t;
+  renderDrawer();
+});
+
+$('#list').addEventListener('click', e => {
+  const b = e.target.closest('[data-open]');
+  if (!b) return;
+  curDay = TRIP.days[+b.dataset.open];
+  curTab = 'all';
+  renderDrawer();
+  dw.classList.add('on'); bd.classList.add('on');
+  document.body.classList.add('locked');
+});
+
+/* ---------- all tickets ---------- */
+$('#btnAll').onclick = () => {
+  const byCat = {};
+  CATS.forEach(c => byCat[c] = []);
+  const seen = {};
+  TRIP.days.forEach(d => {
+    CATS.forEach(c => (d.tickets[c] || []).forEach(slug => {
+      const key = c + '/' + slug;
+      if (seen[key]) return;
+      seen[key] = 1;
+      byCat[c].push({slug, cap: tkOf(slug).label, page: tkOf(slug).page, pages: tkOf(slug).pages,
+                     day: d.label});
+    }));
+  });
+  const total = CATS.reduce((n, c) => n + byCat[c].length, 0);
+  $('#dwT').textContent = '🎫 全部票据汇总';
+  $('#dwS').textContent = '共 ' + total + ' 张 · 按类别排列 · 点击放大';
+  dwTabs.style.display = 'none';
+  let out = '';
+  CATS.forEach(c => {
+    const list = byCat[c];
+    if (!list.length) return;
+    out += '<div class="dsec"><div class="dsec-t">' + CN[c] + ' · ' + list.length + ' 张</div><div class="gal">' +
+      list.map(t => '<button class="gitem" data-slug="' + esc(t.slug) + '">' +
+        '<img src="' + (ASSETS[t.slug] || '') + '" alt="" loading="lazy">' +
+        (t.pages > 1 ? '<span class="pg">' + t.page + '/' + t.pages + '</span>' : '') +
+        '<span class="zm">⤢</span><span class="cap">' + esc(t.day) + ' · ' + esc(t.cap) + '</span></button>').join('') +
+      '</div></div>';
+  });
+  dwB.innerHTML = out;
+  dwB.scrollTop = 0;
+  curDay = null;
+  dw.classList.add('on'); bd.classList.add('on');
+  document.body.classList.add('locked');
+};
+
+/* ---------- lightbox ---------- */
+const lb = $('#lb'), lbB = $('#lbB');
+let lbGroup = [], lbIdx = 0;
+
+function openLb(slug){
+  lbGroup = curDay ? tkList(curDay) : [];
+  if (!lbGroup.length) {
+    lbGroup = [];
+    CATS.forEach(c => Object.keys(ASSETS).forEach(() => {}));
+    TRIP.days.forEach(d => CATS.forEach(c => (d.tickets[c] || []).forEach(s => {
+      if (!lbGroup.some(x => x.slug === s)) lbGroup.push({slug: s, cap: tkOf(s).label});
+    })));
+  }
+  lbIdx = lbGroup.findIndex(t => t.slug === slug);
+  if (lbIdx < 0) { lbGroup = [{slug, cap: tkOf(slug).label}]; lbIdx = 0; }
+  paintLb();
+  lb.classList.add('on');
+  document.body.classList.add('locked');
+}
+function paintLb(){
+  const t = lbGroup[lbIdx];
+  if (!t) return;
+  $('#lbN').textContent = (lbIdx + 1) + ' / ' + lbGroup.length + ' · ' + t.cap;
+  lbB.innerHTML = '<img src="' + (ASSETS[t.slug] || '') + '" alt="">';
+  lbB.scrollTop = 0;
+  $('#lbPrev').disabled = lbIdx === 0;
+  $('#lbNext').disabled = lbIdx === lbGroup.length - 1;
+}
+$('#lbX').onclick = () => {
+  lb.classList.remove('on');
+  if (!dw.classList.contains('on')) document.body.classList.remove('locked');
+};
+$('#lbPrev').onclick = () => { if (lbIdx > 0) { lbIdx--; paintLb(); } };
+$('#lbNext').onclick = () => { if (lbIdx < lbGroup.length - 1) { lbIdx++; paintLb(); } };
+
+document.addEventListener('click', e => {
+  const g = e.target.closest('.gitem');
+  if (g) openLb(g.dataset.slug);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if (lb.classList.contains('on')) $('#lbX').click();
+    else if (dw.classList.contains('on')) closeAll();
+  }
+  if (lb.classList.contains('on')) {
+    if (e.key === 'ArrowLeft') $('#lbPrev').click();
+    if (e.key === 'ArrowRight') $('#lbNext').click();
+  }
+});
+</script>
+</body>
+</html>

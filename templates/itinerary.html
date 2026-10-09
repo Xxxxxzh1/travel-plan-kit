@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>@@TITLE@@ 旅行计划</title>
+<style>
+  /* @@TOKENS@@ */
+  @page { size: A4 landscape; margin: 5mm; }
+  @media print { .section { padding: 0 4px !important; margin: 12px auto !important; } }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+                 "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink); font-size: 9.4pt; line-height: 1.5;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+
+  .hero { background: linear-gradient(135deg, #1b5e20 0%, #1565c0 100%);
+          color: #fff; padding: 14px 20px 11px; }
+  .hero h1 { font-size: 16pt; font-weight: 800; letter-spacing: .3px; margin-bottom: 5px; }
+  .hero .sub { font-size: 9.6pt; opacity: .93; }
+
+  .section { max-width: 1400px; margin: 10px auto; padding: 0 12px; }
+
+  .table-wrap { border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
+  table.itin { width: 100%; border-collapse: collapse; background: var(--card);
+               font-size: 7.9pt; table-layout: fixed; }
+  table.itin th { background: #37474f; color: #fff; padding: 6px 5px; text-align: left;
+                  font-weight: 600; font-size: 7.8pt; }
+  table.itin td { padding: 4px 5px; border-bottom: 1px solid #eceff1;
+                  vertical-align: top; word-wrap: break-word; overflow-wrap: break-word;
+                  line-height: 1.34; }
+  table.itin tr { break-inside: avoid; page-break-inside: avoid; }
+  table.itin tbody tr:nth-child(even) td { background: #fafbfc; }
+
+  th.c-date, td.c-date { width: 52px; }
+  th.c-city, td.c-city { width: 64px; }
+  th.c-slot, td.c-slot { width: 32px; color: var(--ink-3); font-weight: 600; }
+  th.c-plan, td.c-plan { width: 250px; }
+  th.c-trans, td.c-trans { width: 252px; }
+  th.c-stay, td.c-stay { width: 128px; }
+  th.c-weather, td.c-weather { width: 74px; }
+  th.c-file, td.c-file { width: 134px; font-size: 7pt; color: #607d8b; word-break: break-all; }
+
+  td.c-date { border-left: 3px solid var(--it); white-space: nowrap; }
+  tr.row-ch td.c-date { border-left-color: var(--ch); }
+  td.c-date .dn { display: block; color: var(--ink-3); font-size: 7.2pt; margin-top: 2px; }
+
+  .hl    { color: var(--it); font-weight: 700; }
+  tr.row-ch .hl { color: var(--ch); }
+  .warn  { color: var(--warn); font-weight: 700; }
+  td.c-stay b { font-weight: 700; }
+
+  .notes { background: var(--card); border-radius: 10px; padding: 14px 18px;
+           box-shadow: var(--shadow); }
+  .notes h3 { font-size: 10pt; margin-bottom: 7px; break-after: avoid; }
+  .cols { column-count: 2; column-gap: 26px; }
+  .cols .note { break-inside: avoid; }
+  .notes h3 + .note { margin-top: 0; }
+  .note { display: flex; gap: 9px; padding: 6px 0; font-size: 8.6pt;
+          border-top: 1px solid var(--hair); }
+  .note .b { flex: 0 0 4px; border-radius: 2px; background: var(--warn); margin: 3px 0; }
+  .note.red .b { background: var(--stop); }
+  .note.todo .b { background: var(--ch); }
+  .note.todo::after { content: ""; }
+  .foot { text-align: center; color: var(--ink-3); font-size: 7.4pt;
+          padding: 5px 20px 4px; break-before: avoid; page-break-before: avoid; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>@@TITLE@@ 旅行计划 · @@TITLE_EN@@</h1>
+  <div class="sub">@@SPAN@@ &nbsp;·&nbsp; @@LEN@@ &nbsp;·&nbsp; @@WHO@@</div>
+  <div class="sub" style="margin-top:3px">✈️ @@FLIGHTS@@</div>
+  <div class="sub" style="margin-top:3px">✅ @@STATUS@@</div>
+</div>
+
+<div class="section">
+  <div class="table-wrap">
+    <table class="itin">
+      <thead><tr>@@COLS@@</tr></thead>
+      <tbody>
+@@ROWS@@
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="section">
+  <div class="notes">
+@@NOTES@@
+  </div>
+  <div class="foot">@@FOOTER@@</div>
+</div>
+
+</body>
+</html>

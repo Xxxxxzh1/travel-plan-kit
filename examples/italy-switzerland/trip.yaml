@@ -1,0 +1,401 @@
+# =============================================================================
+#  travel-plan-kit — example trip
+#
+#  ⚠️  EVERYTHING IN THIS FILE IS FICTIONAL SAMPLE DATA.
+#      Names, host names, street addresses, phone numbers and booking
+#      references are invented. The route (Rome → Naples → Florence → Milan →
+#      Spiez → Brienz) is real geography; the bookings are not real bookings.
+#      If you fork this to plan a real trip, replace all of it with your own.
+#
+#  Authoring markup available in text fields:
+#      **bold**     -> highlighted   (green/blue accent)
+#      !!bold!!     -> attention     (amber warning)
+#
+#  Build:  python3 scripts/build.py examples/italy-switzerland/trip.yaml
+#  Check:  python3 scripts/model.py examples/italy-switzerland/trip.yaml
+# =============================================================================
+
+meta:
+  title: Italy & Switzerland
+  title_zh: 意大利 · 瑞士
+  slug: italy-switzerland
+  emoji: "🇮🇹🇨🇭"
+  start: 2027-09-24
+  end: 2027-10-07
+  travelers: [Janz, Lynn]
+  # Shown in the roadbook header, and as the country filter labels.
+  route: [罗马, 那不勒斯, 佛罗伦萨, 米兰, 施皮茨, 布里恩茨]
+  countries:
+    it: 意大利
+    ch: 瑞士
+
+# Shown at the top of the roadbook as quick-glance pills.
+hero:
+  who: ["👤 Janz & Lynn", "✅ 全部出票"]
+  stats: ["🗓 14 天 13 晚", "🚄 9 段列车"]
+
+# One-glance facts — this is the block a border officer or hotel reads first.
+summary:
+  entry:
+    date: 2027-09-24
+    place: Rome Fiumicino (FCO), Italy
+    time: "20:05"
+    flight: EK95
+  exit:
+    date: 2027-10-07
+    place: Zurich (ZRH), Switzerland
+    time: "15:30"
+    flight: EK88
+  countries: "Italy (9 nights) · Switzerland (4 nights)"
+  transport_modes: International flights (via Dubai) · High-speed & regional trains · Public ferry
+  status: All flights, train tickets and accommodation are fully paid and confirmed.
+
+flights:
+  - {date: 2027-09-24, code: EK311, from: "Hangzhou Xiaoshan (HGH)", to: "Dubai (DXB)", dep: "00:10", arr: "04:30"}
+  - {date: 2027-09-24, code: EK95,  from: "Dubai (DXB)", to: "Rome Fiumicino (FCO)", dep: "15:45", arr: "20:05"}
+  - {date: 2027-10-07, code: EK88,  from: "Zurich (ZRH)", to: "Dubai (DXB)", dep: "15:30", arr: "23:45"}
+  - {date: 2027-10-08, code: EK310, from: "Dubai (DXB)", to: "Hangzhou Xiaoshan (HGH)", dep: "03:45", arr: "15:55"}
+
+# -----------------------------------------------------------------------------
+# Accommodation — declared ONCE here, referenced by id from each day.
+# A stay that spans three nights is stored once; edit it in one place.
+# -----------------------------------------------------------------------------
+lodging:
+  - id: rome
+    city: 罗马
+    city_en: Rome
+    country: IT
+    type: 民宿
+    type_en: Private apartment
+    platform: Airbnb
+    host: Marco
+    address: Via dei Fiori, 12, Rome, Italy
+    checkin:  {date: 2027-09-24, time: "16:00"}
+    checkout: {date: 2027-09-27, time: "10:00"}
+    nights: 3
+    tickets: [stay-rome]
+
+  - id: naples
+    city: 那不勒斯
+    city_en: Naples
+    country: IT
+    type: 民宿
+    type_en: Private apartment
+    platform: Airbnb
+    host: Giulia
+    address: Via del Mare, 7, Naples, Italy
+    checkin:  {date: 2027-09-27, time: "15:00"}
+    checkout: {date: 2027-09-29, time: "10:00"}
+    nights: 2
+    tickets: [stay-naples]
+
+  - id: florence
+    city: 佛罗伦萨
+    city_en: Florence
+    country: IT
+    type: 民宿
+    type_en: Private apartment
+    platform: Airbnb
+    host: Chiara
+    address: Via dell'Arno, 21, Florence, Italy
+    checkin:  {date: 2027-09-29, time: "12:00"}
+    checkout: {date: 2027-10-01, time: "10:00"}
+    nights: 2
+    tickets: [stay-florence]
+
+  - id: milan
+    city: 米兰
+    city_en: Milan
+    country: IT
+    type: 民宿
+    type_en: Private apartment
+    platform: Airbnb
+    host: Luca
+    address: Via Brera Nuova, 4, Milan, Italy
+    checkin:  {date: 2027-10-01, time: "15:00"}
+    checkout: {date: 2027-10-03, time: "10:00"}
+    nights: 2
+    tickets: [stay-milan]
+
+  - id: spiez
+    city: 施皮茨
+    city_en: Spiez
+    country: CH
+    type: 酒店
+    type_en: Hotel
+    platform: Booking.com
+    address: Seestrasse 18, 3700 Spiez, Switzerland
+    checkin:  {date: 2027-10-03, time: "15:30 – 22:00"}
+    checkout: {date: 2027-10-04, time: "05:00 – 10:30"}
+    nights: 1
+    note: 不可退款
+    tickets: [stay-spiez]
+
+  - id: brienz
+    city: 布里恩茨
+    city_en: Brienz
+    country: CH
+    type: 民宿
+    type_en: Private apartment
+    platform: Airbnb
+    host: Andreas
+    address: Dorfstrasse 9, Brienz, Switzerland
+    checkin:  {date: 2027-10-04, time: "15:00"}
+    checkout: {date: 2027-10-07, time: "11:00"}
+    nights: 3
+    tickets: [stay-brienz]
+
+# -----------------------------------------------------------------------------
+# Tickets — id -> image file(s). Multi-file tickets get "· 第 N 页" captions.
+# -----------------------------------------------------------------------------
+tickets:
+  - {id: flight,           category: transport, label: 机票 · 往返航班（含迪拜中转）, file: tickets/flight.png}
+  - {id: italo,            category: transport, label: Italo 9975 罗马 → 那不勒斯,     file: tickets/train-italo.png}
+  - {id: freccia,          category: transport, label: Frecciarossa 9420 那不勒斯 → 佛罗伦萨, file: tickets/train-freccia.png}
+  - {id: regionale,        category: transport, label: Regionale 18285 佛罗伦萨 → 比萨, file: tickets/train-regionale.png}
+  - {id: intercity,        category: transport, label: Intercity 674 比萨 → 米兰,       file: tickets/train-intercity.png}
+  - {id: milano-spiez,     category: transport, label: 米兰 → 施皮茨（REG + RE 换乘）,  files: [tickets/train-milano-spiez-p1.png, tickets/train-milano-spiez-p2.png]}
+  - {id: jungfrau-pass,    category: transport, label: Jungfrau Travel Pass 3天,        file: tickets/pass-jungfrau.png}
+  - {id: spiez-interlaken, category: transport, label: 施皮茨 → 因特拉肯东,             file: tickets/train-spiez-interlaken.png}
+  - {id: brienz-lungern,   category: transport, label: 布里恩茨 → 龙疆（经 Brünig）,     file: tickets/train-brienz-lungern.png}
+  - {id: scenic-train,     category: transport, label: 景观快车 PE2919 龙疆 → 琉森,      file: tickets/train-scenic.png}
+  - {id: supersaver,       category: transport, label: 龙疆 → 苏黎世机场（联程）,        file: tickets/train-supersaver.png}
+
+  - {id: borghese,         category: scenic,    label: 博尔盖塞美术馆 9/25 10:00,        file: tickets/museum-borghese.png}
+  - {id: vatican,          category: scenic,    label: 梵蒂冈博物馆 + 西斯廷 9/25 16:30, file: tickets/museum-vatican.png}
+  - {id: colosseum,        category: scenic,    label: 斗兽场 + 古罗马广场 9/26 08:30,   file: tickets/museum-colosseum.png}
+  - {id: accademia,        category: scenic,    label: 学院美术馆 9/30 08:45,            file: tickets/museum-accademia.png}
+  - {id: vecchio,          category: scenic,    label: 旧宫塔楼 9/30 13:45,              file: tickets/museum-vecchio.png}
+  - {id: uffizi,           category: scenic,    label: 乌菲兹美术馆 9/30 15:30,          file: tickets/museum-uffizi.png}
+
+  - {id: stay-rome,        category: stay,      label: 罗马住宿 9/24–9/27,      file: tickets/stay-rome.png}
+  - {id: stay-naples,      category: stay,      label: 那不勒斯住宿 9/27–9/29,    file: tickets/stay-naples.png}
+  - {id: stay-florence,    category: stay,      label: 佛罗伦萨住宿 9/29–10/1,   file: tickets/stay-florence.png}
+  - {id: stay-milan,       category: stay,      label: 米兰住宿 10/1–10/3,      file: tickets/stay-milan.png}
+  - {id: stay-spiez,       category: stay,      label: 施皮茨住宿 10/3–10/4,     file: tickets/stay-spiez.png}
+  - {id: stay-brienz,      category: stay,      label: 布里恩茨住宿 10/4–10/7,   file: tickets/stay-brienz.png}
+
+# -----------------------------------------------------------------------------
+# Days — `lodging` is an id reference, not an inlined copy.
+# -----------------------------------------------------------------------------
+days:
+  - n: 1
+    date: 2027-09-24
+    city: 罗马
+    country: IT
+    weather: {temp: "18–26°C", wear: 轻薄长袖 + 薄外套}
+    slots:
+      - {key: 夜, icon: "🛬", text: 20:05 抵达罗马 FCO → Leonardo Express 入市区 → 入住}
+    transport:
+      - {icon: "✈️", title: 阿联酋航空 EK311, sub: 杭州萧山 T4 **00:10** → 迪拜 T3 **04:30**, meta: 经迪拜中转, badge: 已购}
+      - {icon: "✈️", title: 阿联酋航空 EK95,  sub: 迪拜 T3 **15:45** → 罗马 FCO T3 **20:05**, meta: 转机 11h15m, badge: 已购}
+      - {icon: "🚄", title: Leonardo Express, sub: 罗马 FCO → 罗马 Termini, meta: 约 32 分钟 · €14 · 机场现场购票, badge: 现场}
+    lodging: rome
+    tickets: {transport: [flight], stay: [stay-rome]}
+
+  - n: 2
+    date: 2027-09-25
+    city: 罗马
+    country: IT
+    weather: {temp: "18–26°C", wear: 轻薄长袖 + 薄外套}
+    slots:
+      - {key: 上午, icon: "🎨", text: "**博尔盖塞美术馆** 10:00 入场 – 12:00 出场（严格限时段）"}
+      - {key: 午后, icon: "⛪", text: 圣彼得大教堂（免费）+ 圣彼得广场，午餐}
+      - {key: 下午, icon: "🖼", text: "**梵蒂冈博物馆 + 西斯廷礼拜堂** 16:30 入场"}
+      - {key: 晚,   icon: "🍝", text: Trastevere 老区漫步晚餐}
+    transport:
+      - {icon: "🚶", title: 步行 + 地铁 A 线, sub: 市区内移动, meta: 单程票 €1.5}
+    lodging: rome
+    tickets: {scenic: [borghese, vatican]}
+
+  - n: 3
+    date: 2027-09-26
+    city: 罗马
+    country: IT
+    weather: {temp: "18–26°C", wear: 轻薄长袖 + 薄外套}
+    slots:
+      - {key: 上午, icon: "🏛", text: "**斗兽场** 08:30 入场 + 古罗马广场 + 帕拉蒂尼山（标准 24H 套票，!!不含竞技场地面/地下!!）"}
+      - {key: 下午, icon: "🏺", text: 万神庙（€5，现场）→ 纳沃纳广场 → 许愿池}
+      - {key: 晚,   icon: "🍽", text: 西班牙阶梯附近晚餐}
+    transport:
+      - {icon: "🚶", title: 步行 + 地铁 B 线, sub: 斗兽场 → 万神庙 → 许愿池, meta: 全程步行约 25 分钟}
+    lodging: rome
+    tickets: {scenic: [colosseum]}
+
+  - n: 4
+    date: 2027-09-27
+    city: 罗马 → 那不勒斯
+    country: IT
+    weather: {temp: "19–27°C", wear: 短袖 + 防晒}
+    slots:
+      - {key: 上午, icon: "🧳", text: "罗马自由活动；!!10:00 退房!!"}
+      - {key: 下午, icon: "🏛", text: 抵那不勒斯入住；国家考古博物馆（庞贝文物精华，现场购票）}
+      - {key: 晚,   icon: "🍕", text: Spaccanapoli 历史街区漫步 + 正宗那不勒斯披萨}
+    transport:
+      - {icon: "🚄", title: Italo 9975（SMART）, sub: 罗马 Termini **12:41** → 那不勒斯 Centrale **13:58**, meta: 6 车厢 座 5/6 · 含选座, badge: 已购}
+    lodging: naples
+    tickets: {transport: [italo], stay: [stay-naples]}
+
+  - n: 5
+    date: 2027-09-28
+    city: 卡普里（那不勒斯往返）
+    country: IT
+    weather: {temp: "19–27°C", wear: "短袖 + 防晒 + 泳衣"}
+    slots:
+      - {key: 早,   icon: "⛴", text: 8:00 Molo Beverello 乘高速船出发}
+      - {key: 上午, icon: "💙", text: 蓝洞（视海况，早到排队）· 缆车上卡普里镇}
+      - {key: 下午, icon: "🌊", text: 奥古斯丁花园（免费观景）+ 免费海滩 Marina Piccola}
+      - {key: 傍晚, icon: "🌅", text: 乘轮渡返回那不勒斯住宿}
+    transport:
+      - {icon: "⛴️", title: 那不勒斯 ↔ 卡普里 Hydrofoil, sub: Molo Beverello 港 ↔ 卡普里 Marina Grande, meta: 约 50 分钟/程 · €22–25/程 · 港口现场购票, badge: 现场}
+    lodging: naples
+
+  - n: 6
+    date: 2027-09-29
+    city: 那不勒斯 → 佛罗伦萨
+    country: IT
+    weather: {temp: "15–24°C", wear: 薄外套必备}
+    slots:
+      - {key: 上午, icon: "🧳", text: "那不勒斯 !!10:00 退房!!；乘高铁出发"}
+      - {key: 下午, icon: "🌉", text: 14:11 抵佛罗伦萨，入住休整；韦奇奥桥漫步}
+      - {key: 晚,   icon: "🍷", text: 阿诺河畔晚餐}
+    transport:
+      - {icon: "🚄", title: Frecciarossa 9420, sub: 那不勒斯 Centrale **11:10** → 佛罗伦萨 SMN **14:11**, meta: 2 等 · 8 车厢 · 含选座, badge: 已购}
+    lodging: florence
+    tickets: {transport: [freccia], stay: [stay-florence]}
+
+  - n: 7
+    date: 2027-09-30
+    city: 佛罗伦萨
+    country: IT
+    weather: {temp: "15–24°C", wear: 薄外套必备}
+    slots:
+      - {key: 上午, icon: "🗿", text: "**学院美术馆** 08:45 入场（米开朗基罗《大卫》）→ 圣母百花大教堂"}
+      - {key: 下午, icon: "🗼", text: "**旧宫塔楼 Torre di Arnolfo** 13:45 入场（俯瞰全城）"}
+      - {key: 下午, icon: "🖼", text: "**乌菲兹美术馆** 15:30 入场（含语音导览 · 建议预留 2–3 小时）"}
+      - {key: 傍晚, icon: "🌇", text: 米开朗基罗广场看日落（免费 · 最佳全景）}
+    transport:
+      - {icon: "🚶", title: 步行 + 公交 12/13, sub: 学院美术馆 → 大教堂 → 旧宫 → 乌菲兹, meta: 旧宫至乌菲兹步行约 5 分钟}
+    lodging: florence
+    tickets: {scenic: [accademia, vecchio, uffizi]}
+
+  - n: 8
+    date: 2027-10-01
+    city: 佛罗伦萨 → 比萨 → 米兰
+    country: IT
+    weather: {temp: "13–22°C", wear: 中层外套}
+    slots:
+      - {key: 上午, icon: "🧳", text: "!!早退房!!（列车 09:38 发）；10:59 抵比萨"}
+      - {key: 下午, icon: "🗼", text: 比萨奇迹广场（外观拍照，不登塔）+ 大教堂 + 洗礼堂；13:39 乘车赴米兰}
+      - {key: 晚,   icon: "🍸", text: 17:55 抵米兰入住；大教堂夜景；Navigli 运河 Aperitivo}
+    transport:
+      - {icon: "🚄", title: Regionale 18285, sub: 佛罗伦萨 SMN **09:38** → 比萨 Centrale **10:59**, meta: 2 等 · 不对号, badge: 已购}
+      - {icon: "🚄", title: Intercity 674,    sub: 比萨 Centrale **13:39** → 米兰 Centrale **17:55**, meta: 2 等 · 6 车厢 座 11C/11D, badge: 已购}
+    lodging: milan
+    tickets: {transport: [regionale, intercity], stay: [stay-milan]}
+
+  - n: 9
+    date: 2027-10-02
+    city: 米兰
+    country: IT
+    weather: {temp: "13–22°C", wear: 中层外套}
+    slots:
+      - {key: 上午, icon: "🌳", text: 和平之门公园（Parco Sempione）+ 布雷拉艺术区}
+      - {key: 下午, icon: "⛪", text: 米兰大教堂（可登顶，现场购票）+ 埃马努埃莱二世拱廊}
+      - {key: 晚,   icon: "🛶", text: Navigli 运河区散步晚餐}
+    transport:
+      - {icon: "🚶", title: 步行 + 地铁 M1/M2, sub: 米兰市区, meta: 单程票 €2.2}
+    lodging: milan
+
+  - n: 10
+    date: 2027-10-03
+    city: 米兰 → 施皮茨
+    country: CH
+    weather: {temp: "8–16°C", wear: 厚外套 + 防水外层 + 登山鞋}
+    slots:
+      - {key: 上午, icon: "🧳", text: "米兰 !!早退房!!（列车 09:25 发）；11:05 抵 Domodossola"}
+      - {key: 下午, icon: "🏰", text: 换乘 11:58；13:44 抵施皮茨（5 站台）；施皮茨城堡 + 图恩湖畔漫步}
+      - {key: 晚,   icon: "🍽", text: 湖畔小镇晚餐，入住}
+    transport:
+      - {icon: "🚄", title: REG 2408,   sub: 米兰 Centrale **09:25** → Domodossola **11:05**, meta: 意铁区间车 · 2 等, badge: 已购}
+      - {icon: "🚄", title: 换乘 RE 4270, sub: Domodossola **11:58** → 施皮茨 Spiez **13:44**, meta: 5 站台换乘, badge: 已购}
+    lodging: spiez
+    tickets: {transport: [milano-spiez], stay: [stay-spiez]}
+
+  - n: 11
+    date: 2027-10-04
+    city: 施皮茨 → 因特拉肯 → 布里恩茨
+    country: CH
+    weather: {temp: "8–16°C", wear: 厚外套 + 防水外层 + 登山鞋}
+    slots:
+      - {key: 上午, icon: "🧳", text: "施皮茨 !!10:30 前退房!!；施皮茨 → 因特拉肯东；**Jungfrau Travel Pass 今日启用**"}
+      - {key: 全天, icon: "🚠", text: "少女峰区：**First 缆车 + First Cliff Walk 悬崖步道**（可选 First Flyer 滑翔伞）"}
+      - {key: 下午, icon: "🏡", text: 前往布里恩茨入住；湖畔晚餐}
+    transport:
+      - {icon: "🚄", title: 施皮茨 → 因特拉肯东, sub: Libero 个人票（720/730/740/750 区）, meta: 有效 09:05–10:35, badge: 已购}
+      - {icon: "🚠", title: Jungfrau Travel Pass 3 天, sub: 10/4 – 10/6 连续 3 天 · 2 等, meta: 覆盖少女峰区火车 / 缆车, badge: 已购}
+    lodging: brienz
+    tickets: {transport: [spiez-interlaken, jungfrau-pass], stay: [stay-brienz]}
+
+  - n: 12
+    date: 2027-10-05
+    city: 少女峰（布里恩茨往返）
+    country: CH
+    weather: {temp: "-5°C", wear: "羽绒服 + 抓绒 + 手套 + 帽子", cold: true}
+    slots:
+      - {key: 上午, icon: "🏔", text: "布里恩茨 → 因特拉肯 → Grindelwald / Lauterbrunnen → **少女峰站 3454m**；斯芬克斯观景台；冰宫"}
+      - {key: 下午, icon: "🥾", text: 下山至 Kleine Scheidegg → Männlichen 缆车 → 经典全景徒步 → 返布里恩茨}
+      - {key: "⚠️", icon: "🎫", text: "!!登顶段 Jungfraujoch 未预订!!：Pass 仅覆盖至 Eigergletscher，登顶需现场补票约 CHF 75"}
+    transport:
+      - {icon: "🚠", title: Jungfrau Travel Pass, sub: 覆盖区内火车 / 缆车至 Eigergletscher, meta: First、Männlichen、Schynige Platte 均含, badge: 已购}
+      - {icon: "🎫", title: 少女峰登顶段, sub: Eigergletscher → Jungfraujoch, meta: 未预订 · 现场补票约 CHF 75, badge: 补票}
+    lodging: brienz
+    tickets: {transport: [jungfrau-pass]}
+
+  - n: 13
+    date: 2027-10-06
+    city: 布里恩茨（机动日）
+    country: CH
+    weather: {temp: "8–16°C", wear: 厚外套 + 防水外层}
+    slots:
+      - {key: 全天, icon: "🚂", text: "**布里恩茨罗特洪蒸汽登山小火车**（1892 年至今，住宿门口出发！需确认 10 月运营）"}
+      - {key: 或,   icon: "🌺", text: Schynige Platte 高山植物园（Pass 覆盖）/ 布里恩茨湖游船 / 湖畔木雕小镇漫步}
+      - {key: 晚,   icon: "🍽", text: 布里恩茨告别晚餐}
+    transport:
+      - {icon: "🚊", title: Jungfrau Travel Pass, sub: 布里恩茨 ↔ 因特拉肯 ↔ 少女峰区, meta: 区内往返不限次, badge: 已购}
+    lodging: brienz
+    tickets: {transport: [jungfrau-pass]}
+
+  - n: 14
+    date: 2027-10-07
+    city: 布里恩茨 → 苏黎世机场
+    country: CH
+    weather: {temp: "10–18°C", wear: 分层保暖，方便穿脱}
+    slots:
+      - {key: 上午, icon: "🧳", text: "布里恩茨 !!早退房!!（需赶 10:04 龙疆班次）；布里恩茨 → 龙疆（经 Brünig）"}
+      - {key: 景观, icon: "🚞", text: "**PE2919 琉森-因特拉肯景观快车** 龙疆 10:04 → 琉森 10:55（全景座）"}
+      - {key: 接驳, icon: "🚄", text: 琉森 11:09 → 苏黎世 HB 11:51 → **苏黎世机场 12:21**；办登机}
+      - {key: "✈️", icon: "🛫", text: "EK88 苏黎世 **15:30** → 迪拜 23:45；转 EK310 迪拜 03:45 → 杭州 15:55（10/8 抵）"}
+    transport:
+      - {icon: "🚄", title: 布里恩茨 → 龙疆, sub: 经 Brünig 山口, meta: CHF 14.8/人, badge: 已购}
+      - {icon: "🚞", title: PE2919 琉森-因特拉肯景观快车, sub: 龙疆 Lungern **10:04** → 琉森 Luzern **10:55**, meta: 3 车厢 全景座 · 座位预订 CHF 16/人, badge: 已购}
+      - {icon: "🚄", title: Supersaver 联程, sub: 龙疆 **10:04** → 苏黎世机场 **12:21**, meta: PE2919 → IR2620 → IR3267 · CHF 33.8/人, badge: 已购}
+      - {icon: "✈️", title: 阿联酋航空 EK88,  sub: 苏黎世 **15:30** → 迪拜 T3 **23:45**, meta: 距 12:21 抵机场约 3 小时, badge: 已购}
+      - {icon: "✈️", title: 阿联酋航空 EK310, sub: 迪拜 T3 **03:45** → 杭州萧山 T4 **15:55**, meta: 10/8 抵达, badge: 已购}
+    tickets: {transport: [flight, brienz-lungern, scenic-train, supersaver]}
+
+# -----------------------------------------------------------------------------
+# Reminders. level: red | warn | todo   (todo renders as a checklist item)
+# -----------------------------------------------------------------------------
+notes:
+  - {level: red,  text: "**少女峰登顶（Jungfraujoch）段未预订**<br>Pass 仅覆盖至 Eigergletscher，登顶段需现场补票（Pass 持有约 CHF 75）。出发前查当日运营与时段。"}
+  - {level: warn, text: "**乌菲兹美术馆 9/30 15:30**：两人是**两份独立订单**，入场需各自出示二维码；紧接旧宫塔楼 13:45，中间步行约 5 分钟。"}
+  - {level: warn, text: "**多处早退房赶车**：10/1（09:38 发）、10/3（09:25 发）、10/7（需赶 10:04 龙观列车）—— 请提前于退房时间前出发。"}
+  - {level: "",     text: "**现场购票项**：Leonardo Express、卡普里渡船/蓝洞、米兰大教堂登顶、圣母百花大教堂穹顶、万神庙、那不勒斯考古博物馆、布里恩茨蒸汽小火车。"}
+  - {level: todo, text: 决定是否登顶少女峰 Jungfraujoch（现场补票约 CHF 75）}
+  - {level: todo, text: 确认 10/6 布里恩茨罗特洪蒸汽小火车 10 月运营时刻}
+  - {level: todo, text: 申根签证、欧洲漫游 SIM、境外支付/现金（瑞士用 CHF）}
+  - {level: todo, text: "装备：羽绒服 + 抓绒 + 防风防水外层 + 手套 + 帽子（少女峰 -5°C）；登山鞋；泳衣防晒（卡普里）"}
+  - {level: todo, text: 打印 / 离线保存全部票据；护照证件随身}
+
+footer: "实际出票版 · 交通 / 景观 / 住宿均以已支付票据为准<br>票据图片可长按保存到相册 · 双指缩放查看细节"
