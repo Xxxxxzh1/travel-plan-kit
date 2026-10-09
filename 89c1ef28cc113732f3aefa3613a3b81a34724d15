@@ -1,0 +1,182 @@
+scripts/gen_itinerary.py
+  9115b45319058df0 1-282
+trip.example.yaml
+  9115b45319058df0 1-102
+examples/italy-switzerland/out/roadbook.html
+  9115b45319058df0 1-646
+scripts/build.py
+  9115b45319058df0 1-145
+examples/italy-switzerland/out/roadbook.enc.html
+  9115b45319058df0 1-746
+.gitignore
+  9115b45319058df0 1-19
+schema/trip.schema.json
+  9115b45319058df0 1-263
+references/data-model.md
+  9115b45319058df0 1-186
+scripts/ingest_tickets.py
+  9115b45319058df0 1-217
+templates/roadbook.html
+  9115b45319058df0 1-573
+scripts/encrypt_roadbook.mjs
+  9115b45319058df0 1-234
+scripts/model.py
+  9115b45319058df0 1-387
+templates/itinerary.html
+  9115b45319058df0 1-99
+README.md
+  9115b45319058df0 1-164
+scripts/make_sample_tickets.py
+  9115b45319058df0 1-340
+LICENSE
+  9115b45319058df0 1-21
+scripts/browser.py
+  9115b45319058df0 1-135
+templates/tokens.css
+  9115b45319058df0 1-73
+references/build-pipeline.md
+  9115b45319058df0 1-87
+scripts/gen_roadbook.py
+  9115b45319058df0 1-225
+references/ticket-ingest.md
+  9115b45319058df0 1-74
+examples/italy-switzerland/trip.yaml
+  9115b45319058df0 1-401
+examples/italy-switzerland/out/itinerary.html
+  9115b45319058df0 1-314
+examples/italy-switzerland/out/itinerary.md
+  9115b45319058df0 1-40
+SKILL.md
+  9115b45319058df0 1-158
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "89c1ef28cc113732f3aefa3613a3b81a34724d15",
+  "prompts": {
+    "9115b45319058df0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3f7e32e-a535-4c72-93ac-b1053400f6c4",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zhengzhi",
+      "messages": [],
+      "total_additions": 6080,
+      "total_deletions": 149,
+      "accepted_lines": 5931,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "references/ticket-ingest.md": {
+          "additions": 74,
+          "accepted_lines": 74
+        },
+        "scripts/gen_roadbook.py": {
+          "additions": 225,
+          "accepted_lines": 225
+        },
+        "references/build-pipeline.md": {
+          "additions": 87,
+          "accepted_lines": 87
+        },
+        "scripts/model.py": {
+          "additions": 398,
+          "deletions": 11,
+          "accepted_lines": 387
+        },
+        "examples/italy-switzerland/out/roadbook.html": {
+          "additions": 646,
+          "accepted_lines": 646
+        },
+        ".gitignore": {
+          "additions": 19,
+          "accepted_lines": 19
+        },
+        "examples/italy-switzerland/trip.yaml": {
+          "additions": 401,
+          "accepted_lines": 401
+        },
+        "examples/italy-switzerland/out/itinerary.md": {
+          "additions": 49,
+          "deletions": 9,
+          "accepted_lines": 40
+        },
+        "trip.example.yaml": {
+          "additions": 102,
+          "accepted_lines": 102
+        },
+        "examples/italy-switzerland/out/itinerary.html": {
+          "additions": 388,
+          "deletions": 74,
+          "accepted_lines": 314
+        },
+        "templates/tokens.css": {
+          "additions": 73,
+          "accepted_lines": 73
+        },
+        "scripts/ingest_tickets.py": {
+          "additions": 217,
+          "accepted_lines": 217
+        },
+        "README.md": {
+          "additions": 164,
+          "accepted_lines": 164
+        },
+        "scripts/build.py": {
+          "additions": 145,
+          "accepted_lines": 145
+        },
+        "schema/trip.schema.json": {
+          "additions": 263,
+          "accepted_lines": 263
+        },
+        "scripts/make_sample_tickets.py": {
+          "additions": 348,
+          "deletions": 8,
+          "accepted_lines": 340
+        },
+        "references/data-model.md": {
+          "additions": 186,
+          "accepted_lines": 186
+        },
+        "scripts/gen_itinerary.py": {
+          "additions": 302,
+          "deletions": 20,
+          "accepted_lines": 282
+        },
+        "SKILL.md": {
+          "additions": 158,
+          "accepted_lines": 158
+        },
+        "LICENSE": {
+          "additions": 21,
+          "accepted_lines": 21
+        },
+        "scripts/encrypt_roadbook.mjs": {
+          "additions": 236,
+          "deletions": 2,
+          "accepted_lines": 234
+        },
+        "templates/roadbook.html": {
+          "additions": 573,
+          "accepted_lines": 573
+        },
+        "scripts/browser.py": {
+          "additions": 136,
+          "deletions": 1,
+          "accepted_lines": 135
+        },
+        "templates/itinerary.html": {
+          "additions": 120,
+          "deletions": 21,
+          "accepted_lines": 99
+        },
+        "examples/italy-switzerland/out/roadbook.enc.html": {
+          "additions": 749,
+          "deletions": 3,
+          "accepted_lines": 746
+        }
+      }
+    }
+  }
+}
