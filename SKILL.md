@@ -3,7 +3,7 @@ name: travel-plan-kit
 description: "Turn one trip.yaml into a full set of travel documents: a Markdown itinerary table, a print-ready styled HTML/PDF, and a mobile roadbook (路书) — a single self-contained HTML file with every ticket image embedded, so it opens on a phone with no network. Optionally emits a password-encrypted roadbook (AES-256-GCM) safe to host on a public GitHub Pages site. Use when the user wants a travel itinerary, roadbook, 路书, 行程单, 行程规划文档, wants to organise flight/train/hotel tickets into something readable, or wants a phone-friendly offline page for a trip. Requires: Python 3 + PyYAML; Chrome/Chromium for PDF and ticket rendering; Node for the encrypted variant."
 version: 1.0.0
 license: MIT
-homepage: https://github.com/Janz/travel-plan-kit
+homepage: https://github.com/Xxxxxzh1/travel-plan-kit
 metadata:
   author: Janz
 ---

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/Janz/travel-plan-kit/schema/trip.schema.json",
+  "$id": "https://github.com/Xxxxxzh1/travel-plan-kit/schema/trip.schema.json",
   "title": "travel-plan-kit trip",
   "description": "A trip definition. One file generates every output format. See references/data-model.md for prose documentation.",
   "type": "object",

@@ -56,7 +56,7 @@ when nothing else does.
 ## Quick start
 
 ```bash
-git clone https://github.com/Janz/travel-plan-kit ~/.claude/skills/travel-plan-kit
+git clone https://github.com/Xxxxxzh1/travel-plan-kit ~/.claude/skills/travel-plan-kit
 cd ~/.claude/skills/travel-plan-kit
 
 pip install pyyaml            # the only required dependency
