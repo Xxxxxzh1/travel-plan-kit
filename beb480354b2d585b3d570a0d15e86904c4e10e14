@@ -1,0 +1,48 @@
+scripts/record_demo.mjs
+  9115b45319058df0 6,8-16,19,22,30-35,41-42,55,57,60,68,83,86-88,91,93-96,98-99,101-102,104,106,108-122,126-127,130-131,134-137,139-148
+scripts/make_demo_gif.py
+  9115b45319058df0 1-85
+README.md
+  9115b45319058df0 1,8,11-28,36-39,61,63-65,196-197,209,212-215
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "beb480354b2d585b3d570a0d15e86904c4e10e14",
+  "prompts": {
+    "9115b45319058df0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3f7e32e-a535-4c72-93ac-b1053400f6c4",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zhengzhi",
+      "messages": [],
+      "total_additions": 3049,
+      "total_deletions": 2430,
+      "accepted_lines": 3041,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "README.md": {
+          "additions": 38,
+          "deletions": 7,
+          "accepted_lines": 38
+        },
+        "docs/screenshots/roadbook-demo.gif": {
+          "additions": 2844,
+          "deletions": 2364,
+          "accepted_lines": 2844
+        },
+        "scripts/make_demo_gif.py": {
+          "additions": 85,
+          "accepted_lines": 85
+        },
+        "scripts/record_demo.mjs": {
+          "additions": 82,
+          "deletions": 59,
+          "accepted_lines": 74
+        }
+      }
+    }
+  }
+}
