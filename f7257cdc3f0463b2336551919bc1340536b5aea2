@@ -1,0 +1,58 @@
+README.md
+  9115b45319058df0 1,3,5-15,17-23,36-38,41-42,44-46,48,50-51,69-86,94-104,106,117,120,133-135,137,176,189,217,224,244-245,261
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.2.8-ntes.9",
+  "base_commit_sha": "f7257cdc3f0463b2336551919bc1340536b5aea2",
+  "prompts": {
+    "9115b45319058df0": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "a3f7e32e-a535-4c72-93ac-b1053400f6c4",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "zhengzhi",
+      "messages": [],
+      "total_additions": 8037,
+      "total_deletions": 33,
+      "accepted_lines": 8037,
+      "overriden_lines": 0,
+      "per_file_stats": {
+        "docs/promo/03-timeline.png": {
+          "additions": 1324,
+          "accepted_lines": 1324
+        },
+        "docs/promo/01-cover.png": {
+          "additions": 1350,
+          "accepted_lines": 1350
+        },
+        "docs/promo/07-get-started.png": {
+          "additions": 892,
+          "accepted_lines": 892
+        },
+        "docs/promo/02-why.png": {
+          "additions": 900,
+          "accepted_lines": 900
+        },
+        "docs/promo/06-offline-print.png": {
+          "additions": 952,
+          "accepted_lines": 952
+        },
+        "docs/promo/05-all-tickets.png": {
+          "additions": 1220,
+          "accepted_lines": 1220
+        },
+        "README.md": {
+          "additions": 77,
+          "deletions": 33,
+          "accepted_lines": 77
+        },
+        "docs/promo/04-ticket-tabs.png": {
+          "additions": 1322,
+          "accepted_lines": 1322
+        }
+      }
+    }
+  }
+}
