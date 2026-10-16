@@ -1,12 +1,26 @@
-# travel-plan-kit · 自制离线路书（国外旅游超好用！）
+<div align="center">
 
-Turn **one `trip.yaml`** into a complete set of travel documents — a Markdown
-table, a print-ready PDF, and a mobile **roadbook**: a single self-contained
-HTML file with every ticket embedded, that opens on your phone with no signal.
+<img src="docs/promo/01-cover.png" width="330" alt="出境游没信号，照样查票"/>
 
-<p align="center">
-  <img src="docs/screenshots/roadbook-demo.gif" width="320" alt="roadbook interaction: day list → ticket drawer → category tabs → full-screen ticket">
-</p>
+# travel-plan-kit · 自制离线路书
+
+**Turn one `trip.yaml` into a printable itinerary + a mobile roadbook that
+works with no signal.** 国外旅游超好用。
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
+![Offline first](https://img.shields.io/badge/offline--first-yes-2ea44f)
+![Made with](https://img.shields.io/badge/made%20with-Claude%20Code-7c3aed)
+
+<br/>
+
+<img src="docs/screenshots/roadbook-demo.gif" width="310" alt="roadbook interaction: day list → ticket drawer → category tabs → full-screen ticket"/>
+
+<sub><b>点任意一天 → 票据抽屉 → 全屏车票</b> · 真机录制，非效果图</sub>
+
+</div>
+
+---
 
 ## 📴 信号再差也能用 · Works with no signal
 
@@ -19,25 +33,22 @@ HTML file with every ticket embedded, that opens on your phone with no signal.
 > 信号说没就没。把这一份文件 AirDrop 到手机里，用不着流量、用不着 Wi-Fi、也刷不出"页面无法打开"。
 
 The roadbook is one self-contained HTML file. The itinerary, the lodging and
-**every ticket image** are embedded inside it; nothing is fetched at runtime —
-the build asserts this, and the generated file contains zero external
-references. On a plane, in a tunnel, in an alpine valley, it opens anyway.
+**every ticket image** are embedded inside it, and the build asserts zero
+external references. On a plane, in a tunnel, in an alpine valley, it opens
+anyway.
 
 That constraint also explains the encrypted variant below: it needs a network
-fetch, so it is the *backup* for when you have signal, not the thing you rely on
-when you don't.
+fetch, so it is the *backup* for when you have signal — not the thing you rely
+on when you don't.
 
-## The roadbook
+<p align="center">
+  <img src="docs/promo/06-offline-print.png" width="380" alt="所有票据都在这一个文件里 · 附 A4 打印版行程单"/>
+</p>
 
-This is the part worth the effort. It is one HTML file — no server, no app, no
-network. AirDrop it to a phone and it works on a plane, on a train, in an alpine
-valley.
+## 🧭 The roadbook（路书）
 
-Every ticket, every address and the whole itinerary live *inside* the file. At
-the scale of a two-week trip that is about 1 MB — small enough to send over any
-messaging app, and it never needs to phone home.
-
-**Built to be used one-handed, standing up, in a hurry:**
+One HTML file — no server, no app, no network. AirDrop it to a phone and it
+works anywhere. Built to be used one-handed, standing up, in a hurry:
 
 - **Tap any day** → a bottom-sheet drawer slides up with everything for that
   day: the schedule, the transport legs with train numbers and seat
@@ -55,8 +66,24 @@ messaging app, and it never needs to phone home.
 - **Filter by country** to collapse a 14-day trip down to one leg.
 - **Live countdown** — `D-12` before you leave, `Day 3` while you're away, and
   the current day's card is highlighted with a "今天" badge.
-- **Follows your phone's light/dark setting**, and every colour is
-  contrast-checked against both.
+- **Follows your phone's light/dark setting.**
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/promo/03-timeline.png" width="100%" alt="按天排的时间轴"/><br/>
+      <sub><b>按天时间轴</b> · 点任意一天，当天行程 / 交通 / 住宿 / 票据一起弹出</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/promo/04-ticket-tabs.png" width="100%" alt="票据分好类"/><br/>
+      <sub><b>票据自动分类</b> · 标签带计数，闸机前直接翻到车票</sub>
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/promo/05-all-tickets.png" width="100%" alt="全部票据一屏汇总"/><br/>
+      <sub><b>全部票据汇总</b> · 自动去重，点开全屏、双指放大二维码</sub>
+    </td>
+  </tr>
+</table>
 
 ### One more thing about offline
 
@@ -64,7 +91,19 @@ Print the PDF before you leave, and keep the roadbook on the phone. They fail
 differently: paper survives a dead battery, and the roadbook survives a lost
 printout.
 
-## What else you get
+## 😮‍💨 Why this exists
+
+It started as a real two-week Italy → Switzerland trip. Every booking lived in
+a different app, every ticket was another screenshot buried in the camera roll,
+and the moment the signal dropped, none of it was reachable. So the whole trip
+got compiled into one page — and that page got used daily on trains, in alpine
+valleys, and at museum turnstiles. This repo is that tooling, generalised.
+
+<p align="center">
+  <img src="docs/promo/02-why.png" width="380" alt="出境游的真实崩溃"/>
+</p>
+
+## 🖨 What else you get
 
 | Output | What it's for |
 |---|---|
@@ -75,10 +114,10 @@ printout.
 | `roadbook.enc.html` | optional password-encrypted roadbook, safe to host publicly |
 
 <p align="center">
-  <img src="docs/screenshots/itinerary-pdf.png" width="620" alt="printed itinerary PDF">
+  <img src="docs/screenshots/itinerary-pdf.png" width="620" alt="printed itinerary PDF, landscape A4"/>
 </p>
 
-## Quick start
+## 🚀 Quick start
 
 ```bash
 git clone https://github.com/Xxxxxzh1/travel-plan-kit ~/.claude/skills/travel-plan-kit
@@ -91,7 +130,11 @@ open examples/italy-switzerland/out/roadbook.html
 
 Then copy `trip.example.yaml`, fill in your own trip, and run `build.py` on it.
 
-## How the formats stay consistent
+<p align="center">
+  <img src="docs/promo/07-get-started.png" width="380" alt="自己也能生成一份"/>
+</p>
+
+## 🧬 Why the formats stay consistent
 
 Every output renders from the same data, so they cannot disagree with each
 other. Two rules enforce that:
@@ -130,7 +173,7 @@ trip file has problems:
   - tickets[6]: file not found: tickets/shinkansen.pdf
 ```
 
-## Requirements
+## 📦 Requirements
 
 - **Python 3** + `pyyaml` — required
 - **Chrome / Chromium / Edge / Brave** — for PDF and ticket rendering. No
@@ -143,7 +186,7 @@ trip file has problems:
 
 `build.py` checks all of this up front and tells you exactly what's missing.
 
-## Hosting the encrypted roadbook
+## 🔐 Hosting the encrypted roadbook
 
 The roadbook contains live ticket QR codes, so think before putting it online.
 
@@ -171,14 +214,14 @@ word. Use a passphrase.
 connection to fetch the file. The unencrypted one you AirDropped works on a
 plane. For most trips you want both.
 
-## Using it as a Claude Code skill
+## 🤖 Using it as a Claude Code skill
 
 Clone into `~/.claude/skills/` as shown above and Claude picks it up. Ask for a
 "travel itinerary", "路书", or "行程单" and it will gather your trip, write the
 `trip.yaml`, validate it, and build the documents. `SKILL.md` documents the
 workflow; `references/` has the detail.
 
-## Repo layout
+## 🗂 Repo layout
 
 ```
 SKILL.md                      Claude Code skill entry
@@ -198,7 +241,8 @@ scripts/
 templates/                    tokens.css, itinerary.html, roadbook.html
 references/                   data model, pipeline, ticket handling
 examples/italy-switzerland/   complete worked example
-docs/screenshots/             images used above
+docs/promo/                   the promo cards used above
+docs/screenshots/             demo GIF + printed-PDF shot
 ```
 
 The demo GIF is regenerated by recording the built example:
@@ -214,7 +258,7 @@ The recorder sets an exact 390×844 phone viewport through CDP device metrics �
 and stretches the drawer's CSS transition, because a 360 ms slide is shorter
 than a CDP screenshot round-trip and would otherwise never be captured mid-motion.
 
-## About the example data
+## 🎭 About the example data
 
 The example trip is **entirely synthetic**. Names, host names, street addresses,
 phone numbers and booking references are invented; the ticket images are
