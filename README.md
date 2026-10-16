@@ -4,8 +4,8 @@
 
 # travel-plan-kit · 自制离线路书
 
-**Turn one `trip.yaml` into a printable itinerary + a mobile roadbook that
-works with no signal.** 国外旅游超好用。
+**一份 `trip.yaml`，生成可打印的行程单 + 没信号也能打开的手机路书。**
+国外旅游超好用。
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)
@@ -14,7 +14,7 @@ works with no signal.** 国外旅游超好用。
 
 <br/>
 
-<img src="docs/screenshots/roadbook-demo.gif" width="310" alt="roadbook interaction: day list → ticket drawer → category tabs → full-screen ticket"/>
+<img src="docs/screenshots/roadbook-demo.gif" width="310" alt="路书交互演示：日程列表 → 票据抽屉 → 分类标签 → 全屏车票"/>
 
 <sub><b>点任意一天 → 票据抽屉 → 全屏车票</b> · 真机录制，非效果图</sub>
 
@@ -22,7 +22,7 @@ works with no signal.** 国外旅游超好用。
 
 ---
 
-## 📴 信号再差也能用 · Works with no signal
+## 📴 信号再差也能用
 
 > 路书是**一个自包含的 HTML 文件**——行程、住宿地址、**每一张票据图片**全部嵌在文件内部，
 > 运行时不发起任何网络请求。
@@ -32,41 +32,30 @@ works with no signal.** 国外旅游超好用。
 > 出境游最怕的就是这个：瑞士山区的火车上、去卡普里的渡轮上、博物馆排队时想确认门票时间，
 > 信号说没就没。把这一份文件 AirDrop 到手机里，用不着流量、用不着 Wi-Fi、也刷不出"页面无法打开"。
 
-The roadbook is one self-contained HTML file. The itinerary, the lodging and
-**every ticket image** are embedded inside it, and the build asserts zero
-external references. On a plane, in a tunnel, in an alpine valley, it opens
-anyway.
+构建时会自动断言产物里**零外部引用**——这句承诺是构建脚本保证的，不是口头说的。
 
-That constraint also explains the encrypted variant below: it needs a network
-fetch, so it is the *backup* for when you have signal — not the thing you rely
-on when you don't.
+也正因为如此，下面的加密托管版才定位为「有信号时的备份」：它需要联网取文件，
+不是没信号时靠得住的那个。
 
 <p align="center">
   <img src="docs/promo/06-offline-print.png" width="380" alt="所有票据都在这一个文件里 · 附 A4 打印版行程单"/>
 </p>
 
-## 🧭 The roadbook（路书）
+## 🧭 路书能做什么
 
-One HTML file — no server, no app, no network. AirDrop it to a phone and it
-works anywhere. Built to be used one-handed, standing up, in a hurry:
+一个 HTML 文件——不要服务器、不要装 App、不要网络。AirDrop 到手机，
+飞机上、火车上、山谷里都能开。所有交互都为「单手、站着、赶时间」设计：
 
-- **Tap any day** → a bottom-sheet drawer slides up with everything for that
-  day: the schedule, the transport legs with train numbers and seat
-  assignments, where you're sleeping, and the tickets themselves. Swipe down
-  to dismiss it.
-- **Tickets are grouped and counted** — `全部 3 · 🚄 交通 2 · 🏨 住宿 1`. At a
-  ticket gate you want the train ticket, not a scroll through your camera roll.
-- **Tap a ticket** → full-screen. Pinch to zoom into a QR code, swipe between
-  tickets, long-press to save to your photo library.
-- **🎫 全部票据** → every ticket in the whole trip in one place, grouped by
-  category and de-duplicated (a rail pass used on three days appears once).
-- **Addresses are Google Maps links.** Every stay shows one, and the drawer has
-  a full-width "🧭 在 Google 地图中打开" button — the thing you actually want
-  when you're standing on a street corner at 22:00.
-- **Filter by country** to collapse a 14-day trip down to one leg.
-- **Live countdown** — `D-12` before you leave, `Day 3` while you're away, and
-  the current day's card is highlighted with a "今天" badge.
-- **Follows your phone's light/dark setting.**
+- **点任意一天** → 底部抽屉滑出，当天全部信息一屏：行程安排、带车次和座位号的交通段、
+  当晚住宿、还有票据本身。下滑即可关闭。
+- **票据自动分组计数** —— `全部 3 · 🚄 交通 2 · 🏨 住宿 1`。在闸机前你要的是火车票，
+  不是在相册里翻。
+- **点开票据** → 全屏。双指放大二维码、左右滑动换票、长按存入相册。
+- **🎫 全部票据** → 整趟行程的票在一处，按类别排列并自动去重
+  （连用三天的铁路通票只出现一次）。
+- **按国家筛选**，把 14 天的行程折叠成其中一段。
+- **实时倒计时** —— 出发前显示 `D-12`，旅途中显示 `Day 3`，当天的卡片标着「今天」。
+- **跟随系统深浅色**。
 
 <table>
   <tr>
@@ -85,63 +74,87 @@ works anywhere. Built to be used one-handed, standing up, in a hurry:
   </tr>
 </table>
 
-### One more thing about offline
+### 🧭 住宿地址就是 Google 地图链接（配合离线地图是绝配）
 
-Print the PDF before you leave, and keep the roadbook on the phone. They fail
-differently: paper survives a dead battery, and the roadbook survives a lost
-printout.
+路书里**每一间住宿的地址都是可点击的链接**：装了 Google Maps 的手机上点一下，
+直接唤起 App 定位；当天抽屉里还有一个全宽的「🧭 在 Google 地图中打开」按钮——
+**晚上十点站在陌生街角找民宿的时候，你要的就是这个按钮。**
 
-## 😮‍💨 Why this exists
+配合 **Google 离线地图**才是完全体，出发前花三分钟：
 
-It started as a real two-week Italy → Switzerland trip. Every booking lived in
-a different app, every ticket was another screenshot buried in the camera roll,
-and the moment the signal dropped, none of it was reachable. So the whole trip
-got compiled into one page — and that page got used daily on trains, in alpine
-valleys, and at museum turnstiles. This repo is that tooling, generalised.
+1. 在 Google Maps 里把目的地城市**下载为离线区域**（设置 → 离线地图，每个城市几分钟）；
+2. 到了没信号的地方——山区的火车上、地铁隧道里——打开 Google Maps，
+   **搜索和导航照常工作**；
+3. 万一当时点不动链接，**地址文字始终显示在路书里**，复制出来到 Maps 里手动搜也一样。
+
+信号断断续续的地方，这比现开网页查地图省心得多。
+
+## 😮‍💨 为什么做这个
+
+它始于一次真实的意大利 → 瑞士十四天旅行：每个预订躺在不同的 App 里，
+每张票都是相册里又一张截图，而信号一断，什么都够不着。于是整趟行程被编译成了
+一个页面——那个页面在火车上、山谷里、博物馆闸机前被天天打开。这个仓库就是那套
+工具的通用化版本。
 
 <p align="center">
   <img src="docs/promo/02-why.png" width="380" alt="出境游的真实崩溃"/>
 </p>
 
-## 🖨 What else you get
+## 🖨 还会生成什么
 
-| Output | What it's for |
+| 产物 | 用途 |
 |---|---|
-| `itinerary.md` | the master table, plain Markdown — readable anywhere, diffable |
-| `itinerary.html` | the same table, styled for print |
-| `itinerary.pdf` | landscape A4 — print one per traveller; border officers sometimes question people separately |
-| `roadbook.html` | the offline roadbook above |
-| `roadbook.enc.html` | optional password-encrypted roadbook, safe to host publicly |
+| `itinerary.md` | 行程总表，纯 Markdown——哪都能看，能 diff |
+| `itinerary.html` | 同一张表的排版版 |
+| `itinerary.pdf` | 横向 A4——**打印出来过关用**；边检有时会分开问话，一人带一份 |
+| `roadbook.html` | 上面的离线路书 |
+| `roadbook.enc.html` | 可选的密码加密版路书，可安全公开托管 |
 
 <p align="center">
-  <img src="docs/screenshots/itinerary-pdf.png" width="620" alt="printed itinerary PDF, landscape A4"/>
+  <img src="docs/screenshots/itinerary-pdf.png" width="620" alt="横向 A4 打印行程单"/>
 </p>
 
-## 🚀 Quick start
+> 出发前把 PDF 打印出来，路书存进手机。两者的失效方式不同：
+> **纸张不怕没电，路书不怕弄丢。**
+
+## 🚀 快速开始
 
 ```bash
 git clone https://github.com/Xxxxxzh1/travel-plan-kit ~/.claude/skills/travel-plan-kit
 cd ~/.claude/skills/travel-plan-kit
 
-pip install pyyaml            # the only required dependency
+pip install pyyaml            # 唯一的必装依赖
 python3 scripts/build.py examples/italy-switzerland/trip.yaml
 open examples/italy-switzerland/out/roadbook.html
 ```
 
-Then copy `trip.example.yaml`, fill in your own trip, and run `build.py` on it.
+然后复制 `trip.example.yaml`，填入你自己的行程，再对它跑一遍 `build.py`。
 
 <p align="center">
   <img src="docs/promo/07-get-started.png" width="380" alt="自己也能生成一份"/>
 </p>
 
-## 🧬 Why the formats stay consistent
+## 📱 在手机上打开路书（先看这段）
 
-Every output renders from the same data, so they cannot disagree with each
-other. Two rules enforce that:
+路书是一个本地 HTML 文件，**手机上怎么打开因系统而异**：
 
-**A stay is declared once.** `lodging` is a top-level list; a day references it
-by `id`. A stay that spans three nights is stored once and looked up three
-times, so correcting an address is one edit rather than three.
+- **iPhone**：系统**不会**把 Safari 列为 HTML 文件的打开方式——在「文件」App 里点开
+  只会走快速预览，抽屉、灯箱等交互可能受限。请用**带内置浏览器的 App** 打开：
+  - **Documents by Readdle**（App Store 免费下载）：把 HTML 文件导入，点开即可，
+    完整支持抽屉、灯箱、双指缩放；
+  - **Alook 浏览器** 是同类选择。
+- **Android**：文件管理器里点开，选择 Chrome 打开即可。
+- **或者干脆托管**：把 `roadbook.enc.html` 传到 GitHub Pages，手机浏览器直接访问。
+  内容是加密的，公开仓库也安全（见下文）。
+
+> 收到别人发来的路书文件？它就是一个网页文件——存下来，按上面的方式打开就行。
+
+## 🧬 为什么各格式不会互相打架
+
+所有产物都从同一份数据渲染，因此**不可能**彼此矛盾。两条规则保证这一点：
+
+**住宿只声明一次。** `lodging` 是顶层列表，每天通过 `id` 引用。住三晚的住宿
+只存一份、被查三次——改地址是一处修改，而不是三处。
 
 ```yaml
 lodging:
@@ -156,15 +169,11 @@ days:
   - {n: 1, date: 2027-09-24, city: 罗马, lodging: rome}
 ```
 
-**The Markdown and the HTML render from one row builder.** They pass a format
-flag that changes only how inline markup becomes text — never the structure. Two
-hand-maintained copies of the same table drift apart eventually; one builder
-cannot drift from itself.
+**Markdown 和 HTML 由同一个行构建器渲染。** 只传一个格式参数，改变的是内联标记
+如何变成文本，结构永远一致。两份手工维护的表格迟早漂移；同一个构建器不会和自己漂移。
 
-**And the build validates before it generates.** `nights` is checked against the
-dates. A day pointing at a lodging id that doesn't exist is an error. So is a
-ticket id with no file behind it, and a date out of order. You get every problem
-at once, with its location:
+**构建先生成校验、后生成产物。** `nights` 会和日期核对；指向不存在住宿的 `id`、
+找不到文件的票据、顺序错乱的日期，全都是错误——而且**一次性列出所有问题**，并指明位置：
 
 ```
 trip file has problems:
@@ -173,79 +182,73 @@ trip file has problems:
   - tickets[6]: file not found: tickets/shinkansen.pdf
 ```
 
-## 📦 Requirements
+## 📦 环境要求
 
-- **Python 3** + `pyyaml` — required
-- **Chrome / Chromium / Edge / Brave** — for PDF and ticket rendering. No
-  wkhtmltopdf, weasyprint or pandoc needed (and they handle the CSS here worse).
-  Override with `CHROME=/path/to/chrome`.
-- **`pdftoppm`** (poppler) — only if your tickets are PDFs.
+- **Python 3** + `pyyaml` —— 必需
+- **Chrome / Chromium / Edge / Brave** —— 渲染 PDF 和票据图。不需要 wkhtmltopdf、
+  weasyprint 或 pandoc（而且它们对这个用到的 CSS 支持更差）。
+  可用 `CHROME=/path/to/chrome` 指定。
+- **`pdftoppm`**（poppler）—— 仅当票据是 PDF 时需要。
   `brew install poppler` / `apt install poppler-utils`
-- **Pillow** — optional; keeps the roadbook small by downscaling ticket images
-- **Node.js** — only for `--encrypt`
+- **Pillow** —— 可选；用于压缩票据图片、控制路书体积
+- **Node.js** —— 仅 `--encrypt` 需要
 
-`build.py` checks all of this up front and tells you exactly what's missing.
+`build.py` 启动时会先自检环境，缺什么直接告诉你，不会跑到一半才失败。
 
-## 🔐 Hosting the encrypted roadbook
+## 🔐 托管加密版路书
 
-The roadbook contains live ticket QR codes, so think before putting it online.
+路书里是**可用的票据二维码**，往线上放之前要想清楚。
 
-**GitHub Pages sites are always public on free and Pro plans.** Publishing a
-Pages site *privately* requires GitHub Enterprise Cloud — a private repository
-does not give you a private site.
+**GitHub Pages 免费版和专业版的站点一律公开。** 私有 Pages 需要 GitHub
+Enterprise Cloud——**私有仓库并不会给你一个私有的站点**。
 
-So `--encrypt` encrypts the entire payload (itinerary, lodging, and every ticket
-image) with **AES-256-GCM** under a key derived by PBKDF2 from your password,
-gzip-compressed first so the base64 framing isn't paid twice:
+所以 `--encrypt` 会把整个载荷（行程、住宿、每一张票据图）用 **AES-256-GCM**
+加密，密钥由 PBKDF2 从你的密码派生；先 gzip 压缩再加密，避免 base64 膨胀付两次：
 
 ```bash
 python3 scripts/build.py my-trip.yaml --encrypt 'correct horse battery staple'
 ```
 
-The result is inert without the password, so it is safe even in a public repo.
-A JavaScript "enter password" overlay would not be — the tickets would still be
-sitting in the file in clear.
+结果文件没有密码就是一堆惰性密文，放进公开仓库也安全。而在明文数据外面套一层
+"请输入密码"的 JS 弹窗不是加密——查看源代码，票据还在那儿。
 
-⚠️ **Encryption strength equals password strength.** The 400,000 PBKDF2
-iterations make each guess cost something, but `holiday` is still a dictionary
-word. Use a passphrase.
+⚠️ **加密强度等于密码强度。** 40 万轮 PBKDF2 让每次猜测都有成本，
+但 `holiday` 仍然是字典词。请用长口令。
 
-⚠️ **And it trades away offline access.** An encrypted roadbook needs a network
-connection to fetch the file. The unencrypted one you AirDropped works on a
-plane. For most trips you want both.
+⚠️ **它牺牲了离线可用。** 加密版需要联网取文件才能解锁。AirDrop 的明文版
+在飞机上也能开。大多数时候，两个都要。
 
-## 🤖 Using it as a Claude Code skill
+## 🤖 作为 Claude Code 技能使用
 
-Clone into `~/.claude/skills/` as shown above and Claude picks it up. Ask for a
-"travel itinerary", "路书", or "行程单" and it will gather your trip, write the
-`trip.yaml`, validate it, and build the documents. `SKILL.md` documents the
-workflow; `references/` has the detail.
+按上面的方式 clone 到 `~/.claude/skills/`，Claude 会自动识别。之后只要说
+"做一份行程单""生成路书""帮我整理这次旅行的票据"，它就会收集行程信息、
+写好 `trip.yaml`、校验并构建全部文档。工作流写在 `SKILL.md`，细节在 `references/`。
 
-## 🗂 Repo layout
+## 🗂 仓库结构
 
 ```
-SKILL.md                      Claude Code skill entry
-trip.example.yaml             minimal commented template
-schema/trip.schema.json       schema for editor autocomplete
+SKILL.md                      Claude Code 技能入口
+trip.example.yaml             带注释的最小模板
+schema/trip.schema.json       供编辑器自动补全的 schema
 scripts/
-  model.py                    parse + validate + resolve id references
-  build.py                    orchestrator
+  model.py                    解析 + 校验 + 解析 id 引用
+  build.py                    构建编排器
   gen_itinerary.py            → md, html
-  gen_roadbook.py             → mobile roadbook
-  ingest_tickets.py           normalise ticket images
-  make_sample_tickets.py      generate synthetic tickets for the example
-  encrypt_roadbook.mjs        AES-256-GCM password gate
-  browser.py                  locate and drive headless Chrome
-  record_demo.mjs             capture the README's demo GIF frames
-  make_demo_gif.py            assemble those frames into the GIF
+  gen_roadbook.py             → 移动路书
+  ingest_tickets.py           规整票据图片
+  make_sample_tickets.py      为示例生成合成票据
+  encrypt_roadbook.mjs        AES-256-GCM 密码门
+  browser.py                  定位并驱动 headless Chrome
+  record_demo.mjs             录制 README 的演示 GIF 帧
+  make_demo_gif.py            把帧合成 GIF
 templates/                    tokens.css, itinerary.html, roadbook.html
-references/                   data model, pipeline, ticket handling
-examples/italy-switzerland/   complete worked example
-docs/promo/                   the promo cards used above
-docs/screenshots/             demo GIF + printed-PDF shot
+references/                   数据模型、构建管线、票据处理
+examples/italy-switzerland/   完整示例
+docs/promo/                   上方的宣传卡片
+docs/screenshots/             演示 GIF + 打印版 PDF 截图
 ```
 
-The demo GIF is regenerated by recording the built example:
+演示 GIF 由录制的帧合成，可一键复现：
 
 ```bash
 cd examples/italy-switzerland/out && python3 -m http.server 8770 --bind 127.0.0.1 &
@@ -253,23 +256,19 @@ node scripts/record_demo.mjs http://localhost:8770/roadbook.html /tmp/frames
 python3 scripts/make_demo_gif.py /tmp/frames docs/screenshots/roadbook-demo.gif
 ```
 
-The recorder sets an exact 390×844 phone viewport through CDP device metrics —
-`--window-size` gets clamped by headless Chrome and silently crops the frames —
-and stretches the drawer's CSS transition, because a 360 ms slide is shorter
-than a CDP screenshot round-trip and would otherwise never be captured mid-motion.
+录制器通过 CDP 设备模拟设定精确的 390×844 手机视口——headless Chrome 会钳制
+`--window-size` 导致画面被裁——并拉长抽屉的 CSS 过渡，因为 360 毫秒的滑出动画
+比一次 CDP 截图往返还短，不拉长就永远拍不到滑动中间态。
 
-## 🎭 About the example data
+## 🎭 关于示例数据
 
-The example trip is **entirely synthetic**. Names, host names, street addresses,
-phone numbers and booking references are invented; the ticket images are
-generated by `scripts/make_sample_tickets.py` and stamped
-`SAMPLE DATA — NOT A REAL TICKET`. The route is real geography and nothing else
-is real.
+示例行程是**完全合成的**：人名、房东、街道地址、电话、预订号均为虚构；票据图由
+`scripts/make_sample_tickets.py` 生成，并盖有 `SAMPLE DATA — NOT A REAL TICKET`
+水印。路线是真实地理，其余皆非真实。
 
-That is deliberate. Real ticket images carry names, dates of birth, booking
-references and QR codes that are themselves the credential — they do not belong
-in a public repository. Keep your own generated output out of version control.
+这是刻意的。真实票据图包含姓名、出生日期、预订号，以及本身就是凭证的二维码——
+它们不该出现在公开仓库里。自己生成的真实产物请留在版本控制之外。
 
-## Licence
+## 许可证
 
 MIT
